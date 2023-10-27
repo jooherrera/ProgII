@@ -1,3 +1,5 @@
+package Amazing;
+
 class Automovil extends Transporte {
     private static final int MAX_PAQUETES = 5;
 

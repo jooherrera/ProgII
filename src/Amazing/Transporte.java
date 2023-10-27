@@ -1,10 +1,9 @@
 package Amazing;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Transporte extends Amazing implements IEmpresa {
+public abstract class Transporte {
     protected String patente;
     protected int volMax;
     protected int volActual;
@@ -21,39 +20,42 @@ public abstract class Transporte extends Amazing implements IEmpresa {
         this.cargamento = new HashMap<>();
     }
 
-    @Override
-    public String cargarTransporte(String patente) {
-        if (!transportes.containsKey(patente)) {
-            throw new IllegalArgumentException("Patente no encontrada.");
-        }
-        Transporte transporte = transportes.get(patente);
 
-        StringBuilder cargaTransporte = new StringBuilder();
+//    public String cargarTransporte(String patente) {
+//        if (!transportes.containsKey(patente)) {
+//            throw new IllegalArgumentException("Patente no encontrada.");
+//        }
+//        Transporte transporte = transportes.get(patente);
+//
+//        StringBuilder cargaTransporte = new StringBuilder();
+//
+//        for (Map.Entry<Integer, PaqueteAEntregar> entry : transporte.cargamento.entrySet()) {
+//            int numPedido = entry.getKey();
+//            int codPaquete = entry.getValue().getId();
+//            String direccion = entry.getValue().getDireccionEntrega();
+//
+//            cargaTransporte.append(" + [").append(numPedido).append(" - ").append(codPaquete).append("] ").append(direccion).append("\n");
+//        }
+//
+//        return cargaTransporte.toString();
+//    }
 
-        for (Map.Entry<Integer, PaqueteAEntregar> entry : transporte.cargamento.entrySet()) {
-            int numPedido = entry.getKey();
-            int codPaquete = entry.getValue().getId();
-            String direccion = entry.getValue().getDireccionEntrega();
-
-            cargaTransporte.append(" + [").append(numPedido).append(" - ").append(codPaquete).append("] ").append(direccion).append("\n");
-        }
-
-        return cargaTransporte.toString();
+    public double consultarCostoEntrega() {
+    	return (double) this.valorViaje;
     }
+    
+//    public double costoEntrega(String patente) {
+//        if (!transportes.containsKey(patente)) {
+//            throw new IllegalArgumentException("Patente no encontrada.");
+//        }
+//        Transporte transporte = transportes.get(patente);
+//        if (transporte.cargamento.isEmpty()) {
+//            throw new IllegalArgumentException("El transporte no está cargado.");
+//        }
+//        return consultarCostoEntrega();
+//    }
 
-    @Override
-    public double costoEntrega(String patente) {
-        if (!transportes.containsKey(patente)) {
-            throw new IllegalArgumentException("Patente no encontrada.");
-        }
-        Transporte transporte = transportes.get(patente);
-        if (transporte.cargamento.isEmpty()) {
-            throw new IllegalArgumentException("El transporte no está cargado.");
-        }
-        return consultarCostoEntrega();
-    }
 
-    @Override
     public boolean hayTransportesIdenticos() {
         for (Transporte transporte1 : transportes.values()) {
             for (Transporte transporte2 : transportes.values()) {
@@ -74,7 +76,6 @@ public abstract class Transporte extends Amazing implements IEmpresa {
                 "Cantidad de Paquetes Actual: " + canPaqActual + "\n";
     }
 
-    protected abstract double consultarCostoEntrega();
     protected abstract boolean esIgual(Transporte otro);
 
     public boolean cargarPaquete(PaqueteAEntregar paquete) {

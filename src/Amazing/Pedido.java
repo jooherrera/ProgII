@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Pedido extends Amazing {
+public class Pedido {
     private int numPedido;
     private Cliente datosCliente;
     private Map<Integer, PaqueteAEntregar> carrito;
@@ -15,14 +15,14 @@ public class Pedido extends Amazing {
     public Pedido(int numPedido, String nombre, String direccion, int dni) {
         this.numPedido = numPedido;
         this.datosCliente = new Cliente(dni, nombre, direccion);
-        this.carrito = new HashMap<>();
+        this.carrito = new HashMap<Integer, PaqueteAEntregar>();
         this.facturacion = 0;
         this.cerrado = false;
     }
 
-    public void agregarPaquete(PaqueteAEntregar paquete) {
-        if (!cerrado) {
-            carrito.put(paquete.getId(), paquete);
+    public void agregarPaquete(int codigoPaquete, PaqueteAEntregar paquete) {
+        if (!cerrado ) {
+            carrito.put(codigoPaquete, paquete);
             facturacion += paquete.devolverCostoTotal();
         }
     }
@@ -37,20 +37,20 @@ public class Pedido extends Amazing {
         return false;
     }
 
-    public List<PaqueteAEntregar> obtenerPaquetesMaxVolumen(double valor) {
+    public List<PaqueteAEntregar> obtenerPaquetesMaxVolumen(int valor) {
         List<PaqueteAEntregar> paquetesMaxVolumen = new ArrayList<>();
         for (PaqueteAEntregar paquete : carrito.values()) {
-            if (paquete.getVolumen() >= valor) {
+            if (paquete.cabeEn(valor) ) {
                 paquetesMaxVolumen.add(paquete);
             }
         }
         return paquetesMaxVolumen;
     }
 
-    public List<PaqueteAEntregar> obtenerpaquetesMinVolumen(double valor) {
+    public List<PaqueteAEntregar> obtenerpaquetesMinVolumen(int valor) {
         List<PaqueteAEntregar> paquetesMinVolumen = new ArrayList<>();
         for (PaqueteAEntregar paquete : carrito.values()) {
-            if (paquete.getVolumen() <= valor) {
+            if (paquete.cabeEn(valor) ) {
                 paquetesMinVolumen.add(paquete);
             }
         }
