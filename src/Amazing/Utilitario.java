@@ -1,5 +1,5 @@
 class Utilitario extends Transporte {
-    private static final int MAX_PAQUETES = 10;
+    private static final int MAX_PAQUETES = 3;
     private int valorExtra;
 
     public Utilitario(String patente, int volMax, int valorViaje, int valorExtra) {
@@ -8,12 +8,18 @@ class Utilitario extends Transporte {
     }
 
     @Override
-    protected double consultarCostoEntrega() {
-        return valorViaje + (canPaqActual > MAX_PAQUETES ? valorExtra : 0);
+    public double consultarCostoEntrega() {
+        return valorViaje + calcularValorExtra();
     }
 
-    @Override
-    protected int getMaxPaquetes() {
-        return MAX_PAQUETES;
+    private double calcularValorExtra() {
+    	return cantPaqActual > MAX_PAQUETES ? valorExtra : 0;
     }
+    
+    @Override
+	public boolean cargarPaquete(PaqueteAEntregar paquete) {
+//    	Los utilitarios tienen un valor extra que cobran a la empresa por cada viaje si la entrega
+//    	supera los 3 paquetes. Lleva paquetes ordinarios y especiales.
+		return false;
+	}
 }

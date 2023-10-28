@@ -378,23 +378,6 @@
 										},
 										{
 											"_type": "UMLOperationView",
-											"_id": "AAAAAAGLNsNQHsum7dk=",
-											"_parent": {
-												"$ref": "AAAAAAGLNrw/hsspsOA="
-											},
-											"model": {
-												"$ref": "AAAAAAGLNsNQGMujXcQ="
-											},
-											"font": "Arial;13;0",
-											"left": 1253,
-											"top": 576,
-											"width": 716.5107421875,
-											"height": 13,
-											"text": "+obtenerPaquetesDeTransporteCargado(patente: String): Map<Integer_String>",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLOperationView",
 											"_id": "AAAAAAGLYgorBkZ3KPs=",
 											"_parent": {
 												"$ref": "AAAAAAGLNrw/hsspsOA="
@@ -404,7 +387,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1253,
-											"top": 591,
+											"top": 576,
 											"width": 716.5107421875,
 											"height": 13,
 											"text": "+costoEntrega(patente: String): double",
@@ -421,7 +404,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1253,
-											"top": 606,
+											"top": 591,
 											"width": 716.5107421875,
 											"height": 13,
 											"text": "+facturacionTotalPedidosCerrados(): double",
@@ -438,7 +421,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1253,
-											"top": 621,
+											"top": 606,
 											"width": 716.5107421875,
 											"height": 13,
 											"text": "+pedidosNoEntregados(): Map<Integer_String>",
@@ -455,7 +438,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1253,
-											"top": 636,
+											"top": 621,
 											"width": 716.5107421875,
 											"height": 13,
 											"text": "+hayTransportesIdenticos(): boolean",
@@ -472,7 +455,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1253,
-											"top": 651,
+											"top": 636,
 											"width": 716.5107421875,
 											"height": 13,
 											"text": "+toString(): String",
@@ -483,7 +466,7 @@
 									"left": 1248,
 									"top": 421,
 									"width": 726.5107421875,
-									"height": 248
+									"height": 233
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -2833,7 +2816,7 @@
 											"top": 743,
 											"width": 538.94775390625,
 											"height": 13,
-											"text": "-canPaqActual: int",
+											"text": "-cantPaqActual: int",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6043,34 +6026,6 @@
 						},
 						{
 							"_type": "UMLOperation",
-							"_id": "AAAAAAGLNsNQGMujXcQ=",
-							"_parent": {
-								"$ref": "AAAAAAGLNrw/g8sgzVA="
-							},
-							"name": "obtenerPaquetesDeTransporteCargado",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGLNsXNxMvJfr4=",
-									"_parent": {
-										"$ref": "AAAAAAGLNsNQGMujXcQ="
-									},
-									"name": "patente",
-									"type": "String"
-								},
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGLNsXNxMvKnSA=",
-									"_parent": {
-										"$ref": "AAAAAAGLNsNQGMujXcQ="
-									},
-									"type": "Map<Integer_String>",
-									"direction": "return"
-								}
-							]
-						},
-						{
-							"_type": "UMLOperation",
 							"_id": "AAAAAAGLYgoq+UZ0R8I=",
 							"_parent": {
 								"$ref": "AAAAAAGLNrw/g8sgzVA="
@@ -8292,7 +8247,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGLOHjgXM9sngM="
 							},
-							"name": "canPaqActual",
+							"name": "cantPaqActual",
 							"visibility": "private",
 							"type": "int"
 						},
