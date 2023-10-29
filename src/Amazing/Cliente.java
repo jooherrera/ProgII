@@ -11,15 +11,27 @@ class Cliente {
         this.direccion = validarDireccion(direccion);
     }
 
-    public String devolverDireccion() {
-        return direccion;
+    public String domicilio() {
+    	return this.devolverDireccion();
     }
 
+    public String identificacion() {
+    	return this.devolverNombre();
+    }
+    
     @Override
     public String toString() {
         return "Nombre: " + nombre + "\n" +
                 "DNI: " + dni + "\n" +
                 "Dirección: " + direccion + "\n";
+    }
+    
+    
+    private String devolverDireccion() {
+        return direccion;
+    }
+    private String devolverNombre() {
+    	return this.nombre;
     }
     
     private boolean esNulo(Object param) {

@@ -10,12 +10,17 @@ public class PaqueteOrdinario extends PaqueteAEntregar {
 
 	@Override
 	public int devolverCostoTotal() {
-		return 0;
+		return this.calcularCostoTotal();
 	}
 
 	@Override
 	public String toString() {
 		return null;
 	}
+	
+	//---------------- PRIVATE-----------------------
 
+	private int calcularCostoTotal() {
+		return this.costoEnvio + super.devolverCostoTotal();
+	}
 }

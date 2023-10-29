@@ -1,38 +1,39 @@
 package Amazing;
 
-import java.util.List;
-
 class Automovil extends Transporte {
-	
-    private int maxPaq;
-    private static final int VOLUMEN_MAX_POR_PAQUETE = 2000;
 
-    public Automovil(String patente, int volMax, int valorViaje, int maxPaq) {
-        super(patente, volMax, valorViaje);
-        this.maxPaq = maxPaq;
-    }
-    
-    @Override
-    public boolean esIgual(Transporte otro) {
-        return this.getClass() == otro.getClass() &&
-                this.volMax == otro.volMax &&
-                this.valorViaje == otro.valorViaje &&
-                this.cantPaqActual == otro.cantPaqActual &&
-                this.cargamento.equals(otro.cargamento);
-    }
+	private int maxPaq;
+	private final int VOLUMEN_MAX_POR_PAQUETE = 2000;
 
-
-	
-    @Override
-	public String cargarTransporte(List<Pedido> pedidos) {
-//    	 Los comunes tienen un límite máximo de paquetes. Solo lleva paquetes ordinarios
-//    	 menores a 2000 de volumen cada uno
-		return "";
+	public Automovil(String patente, int volMax, int valorViaje, int maxPaq) {
+		super(patente, volMax, valorViaje);
+		this.maxPaq = maxPaq;
 	}
 
-    @Override
-    public String toString(){
-    	return "";
-    }
+	@Override
+	public boolean cargarPaquete(PaqueteAEntregar paquete) {
+		boolean ret = false;
+		if (paqueteAceptable(paquete))
+			ret |= super.cargarPaquete(paquete,maxPaq);
+
+		return ret;
+	}
+
+	@Override
+	public double consultarCostoEntrega() {
+		return super.consultarCostoEntrega();
+	}
+
+	@Override
+	public boolean esIgual(Transporte otro) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	//--------PRIVATE-----
+
+	private boolean paqueteAceptable(PaqueteAEntregar paq) {
+		return (paq instanceof PaqueteOrdinario) && paq.cabeEn(VOLUMEN_MAX_POR_PAQUETE);
+	}
 
 }

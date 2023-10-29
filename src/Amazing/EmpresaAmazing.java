@@ -5,109 +5,115 @@ import java.util.Map;
 
 public class EmpresaAmazing implements IEmpresa {
 	private String cuit;
-	private Map<Integer, Pedido> pedidos;
+	private HashMap<Integer, Pedido> pedidos;
 	private Map<String, Transporte> transportes;
 	private int sigCodPaquete;
+	private double totalFacturado;
 
 	EmpresaAmazing(String cuit) {
 		this.cuit = cuit;
 		this.pedidos = new HashMap<Integer, Pedido>();
 		this.transportes = new HashMap<String, Transporte>();
 		this.sigCodPaquete = 1;
+		this.totalFacturado = 0;
 	}
 
 	@Override
 	public void registrarAutomovil(String patente, int volMax, int valorViaje, int maxPaq) {
-		registrar();
-		return;
-
+		agregarTransporte(patente, new Automovil(patente, volMax, valorViaje, maxPaq));
 	}
 
 	@Override
 	public void registrarUtilitario(String patente, int volMax, int valorViaje, int valorExtra) {
-		// TODO Auto-generated method stub
-
+		agregarTransporte(patente, new Utilitario(patente, volMax, valorViaje, valorExtra));
 	}
 
 	@Override
 	public void registrarCamion(String patente, int volMax, int valorViaje, int adicXPaq) {
-		// TODO Auto-generated method stub
-
+		agregarTransporte(patente, new Camion(patente, volMax, valorViaje, adicXPaq));
 	}
 
 	@Override
 	public int registrarPedido(String cliente, String direccion, int dni) {
-		// TODO Auto-generated method stub
-		return 0;
+		int id = siguienteIDPedido();
+		this.pedidos.put(id, new Pedido(id, cliente, direccion, dni));
+		return id;
 	}
 
 	@Override
 	public int agregarPaquete(int codPedido, int volumen, int precio, int costoEnvio) {
-		// TODO Auto-generated method stub
-		return 0;
+		int codigoUnico = sigCodPaquete;
+		agregarPaqueteAPedido(codPedido, codigoUnico,new PaqueteOrdinario(codigoUnico, volumen, precio, costoEnvio, cuit));
+		return codigoUnico;
 	}
 
 	@Override
-	public int agregarPaquete(int codPedido, int volumen, int precio, int porcentaje, int adicional) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int agregarPaquete(int codPedido, int volumen, int precio, int porcentaje, int adicional) {		
+		int codigoUnico = sigCodPaquete;
+		agregarPaqueteAPedido(codPedido, codigoUnico,new PaqueteEspecial(codPedido, volumen, precio, porcentaje, adicional, cuit));
+		return codigoUnico;
 	}
 
 	@Override
 	public boolean quitarPaquete(int codPaquete) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean eliminado = false;
+		for(Pedido pedido : pedidos.values())
+				eliminado |= pedido.eliminarPaquete(codPaquete);
+		return eliminado;	
 	}
 
 	@Override
 	public double cerrarPedido(int codPedido) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return obtenerPedido(codPedido).cerrarPedido();
 	}
 
 	@Override
 	public String cargarTransporte(String patente) {
-		if (!transportes.containsKey(patente)) {
-			throw new IllegalArgumentException("Patente no encontrada.");
-		}
-		Transporte transporte = transportes.get(patente);
 
-		StringBuilder cargaTransporte = new StringBuilder();
+		Transporte transporte = obtenerTransporte(patente);
 
-		for (Map.Entry<Integer, PaqueteAEntregar> entry : transporte.cargamento.entrySet()) {
-			int numPedido = entry.getKey();
-			int codPaquete = entry.getValue().getId();
-			String direccion = entry.getValue().getDireccionEntrega();
+		StringBuilder cargamento = new StringBuilder();
 
-			cargaTransporte.append(" + [").append(numPedido).append(" - ").append(codPaquete).append("] ")
-					.append(direccion).append("\n");
-		}
+		for (Pedido pedido : pedidos.values() ) 
+//			cargamento.append(transporte.cargarTransporte(pedido));
+			cargamento.append(pedido.cargarPaquetes(transporte));
 
-		return cargaTransporte.toString();
+
+		return cargamento.toString();
 	}
 
+	
 	@Override
 	public double costoEntrega(String patente) {
-		if (!transportes.containsKey(patente)) {
-			throw new IllegalArgumentException("Patente no encontrada.");
-		}
+		if (!existeTransporte(patente)) 
+			throw new RuntimeException("Patente no encontrada.");
+		
 		Transporte transporte = transportes.get(patente);
-		if (transporte.cargamento.isEmpty()) {
-			throw new IllegalArgumentException("El transporte no está cargado.");
-		}
-		return transporte.consultarCostoEntrega();
+		
+		return transporte.consultarCostoEntrega();	
 	}
 
 	@Override
 	public Map<Integer, String> pedidosNoEntregados() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Map<Integer,String> listaNoEntregados = new HashMap<Integer, String>();
+		for (Map.Entry<Integer, Pedido> entrada : pedidos.entrySet()) {
+			
+			Integer key = entrada.getKey();
+			Pedido pedido = entrada.getValue();
+			
+			if(pedido.faltanEntregar())
+				listaNoEntregados.put(key,  pedido.duenio());
+				
+		}
+		
+		return listaNoEntregados;
 	}
 
 	@Override
 	public double facturacionTotalPedidosCerrados() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.totalFacturado;
 	}
 
 	@Override
@@ -124,13 +130,46 @@ public class EmpresaAmazing implements IEmpresa {
 
 	// --------------- PRIVATE
 	private boolean existeTransporte(String patente) {
-		if (transportes.containsKey(patente))
-			throw new Error("Transporte con patente: " + patente + " ya está registrado.");
-		return true;
+		return transportes.containsKey(patente);
 	}
 
-	private void agregarAutomovil(String patente, int volMax, int valorViaje, int maxPaq) {
-		if(existeTransporte(patente))
-			this.transportes.put(patente, new Auto)
+	private boolean existePedido(int codPedido) {
+		return this.pedidos.containsKey(codPedido);
 	}
+	
+	private Transporte obtenerTransporte(String patente) {
+		if(!existeTransporte(patente))
+			throw new RuntimeException("El transporte con patente: " + patente + " no existe.");
+		return transportes.get(patente);
+	}
+	
+	private Pedido obtenerPedido(int codPedido) {
+		if(!existePedido(codPedido))
+			throw new RuntimeException("El pedido con código: " + codPedido + " no existe.");
+		return pedidos.get(codPedido);
+	}
+
+	private void agregarTransporte(String patente, Transporte transporte) {
+		if (existeTransporte(patente))
+			throw new RuntimeException("El transporte con patente: '" + patente + "' ya existe");
+		this.transportes.put(patente, transporte);
+	}
+	
+	
+
+	
+	private void agregarPaqueteAPedido(int codPedido, int codUnico, PaqueteAEntregar paquete) {
+		obtenerPedido(codPedido).agregarPaquete(codUnico, paquete);
+		this.aumentarCodPaquete();
+	}
+	
+	
+	private void aumentarCodPaquete() {
+		this.sigCodPaquete++;
+	}
+
+	private int siguienteIDPedido() {
+		return this.pedidos.size() + 1;
+	}
+
 }
