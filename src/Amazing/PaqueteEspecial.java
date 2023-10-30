@@ -1,7 +1,8 @@
 package Amazing;
 
 public class PaqueteEspecial extends PaqueteAEntregar {
-	private int porcentaje, adicional;
+	private int adicional;
+	private double porcentaje;
 	private final int VOL_ADICIONAL_DUPLICADO = 5000;
 	private final int VOL_ADICIONAL = 3000;
 
@@ -12,18 +13,20 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 	}
 
 	@Override
-	public int devolverCostoTotal() {
+	public double devolverCostoTotal() {
 		return calcularCostoTotal();
 	}
 
 	@Override
 	public String toString() {
-		return null;
+		return "PaqueteEspecial [porcentaje=" + porcentaje + ", adicional=" + adicional + ", VOL_ADICIONAL_DUPLICADO="
+				+ VOL_ADICIONAL_DUPLICADO + ", VOL_ADICIONAL=" + VOL_ADICIONAL + "," + super.toString()
+				+ "]";
 	}
 
 	// ---------------- PRIVATE-----------------------
 
-	private int calcularCostoTotal() {
+	private double calcularCostoTotal() {
 		if (super.tamanioMenorQue(VOL_ADICIONAL))
 			return costoBase();
 		if (super.tamanioMayorQue(VOL_ADICIONAL_DUPLICADO))
@@ -31,20 +34,20 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 		return adicionalSumado();
 	}
 
-	private int adicionalSumado() {
+	private double adicionalSumado() {
 		return this.costoBase() + this.adicional();
 	}
 
-	private int adicionalDuplicado() {
+	private double adicionalDuplicado() {
 		return this.costoBase() + (2 * this.adicional());
 	}
 
-	private int costoBase() {
+	private double costoBase() {
 		return super.devolverCostoTotal() * this.porcentaje();
 	}
 
-	private int porcentaje() {
-		return this.porcentaje;
+	private double porcentaje() {
+		return (this.porcentaje /100) + 1 ;
 	}
 
 	private int adicional() {

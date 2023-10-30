@@ -38,6 +38,22 @@ public abstract class Transporte {
 
 
 	public boolean cargarPaquete(PaqueteAEntregar paquete) {
+//		if (paquete.cabeEn(volActual)) {
+//			this.volActual -= paquete.cargarATransporte();
+//			this.cargamento.put(Integer.parseInt(paquete.devolverCodigoUnico()), paquete);
+//			return true;
+//		}
+//		return false;
+		return cargar(paquete);
+	}
+	
+	public boolean cargarPaquete(PaqueteAEntregar paquete,int limite) {
+		if(hayCapacidad(limite))
+			return cargar(paquete);
+		return false;
+	}
+	
+	private boolean cargar(PaqueteAEntregar paquete) {
 		if (paquete.cabeEn(volActual)) {
 			this.volActual -= paquete.cargarATransporte();
 			this.cargamento.put(Integer.parseInt(paquete.devolverCodigoUnico()), paquete);
@@ -46,16 +62,12 @@ public abstract class Transporte {
 		return false;
 	}
 	
-	public boolean cargarPaquete(PaqueteAEntregar paquete,int limite) {
-		if(hayCapacidad(limite))
-			return this.cargarPaquete(paquete);
-		return false;
-	}
-	
+
+
 	@Override
 	public String toString() {
-		return "Patente: " + patente + "\n" + "Volumen Máximo: " + volMax + "\n" + "Volumen Actual: " + volActual + "\n"
-				+ "Valor del Viaje: " + valorViaje + "\n" + "Cantidad de Paquetes Actual: " + cantPaquetes() + "\n";
+		return "Transporte [patente=" + patente + ", volMax=" + volMax + ", volActual=" + volActual + ", valorViaje="
+				+ valorViaje + ", cargamento=" + cargamento + "]";
 	}
 
 	public int cantPaquetesCargados() {
@@ -71,6 +83,10 @@ public abstract class Transporte {
 	
 	private int cantPaquetes() {
 		return this.cargamento.size();
+	}
+	
+	public void imprimirCargamento() {
+		System.out.println(cargamento);
 	}
 
     private boolean hayCapacidad(int limite) {

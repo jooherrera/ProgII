@@ -22,7 +22,7 @@ class Camion extends Transporte {
     
     @Override
     public double consultarCostoEntrega() {
-        return super.consultarCostoEntrega() + this.calcularValorAdicional();
+        return this.calcularValorAdicional() + super.consultarCostoEntrega();
     }
 
 

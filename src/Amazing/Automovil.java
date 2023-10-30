@@ -2,6 +2,12 @@ package Amazing;
 
 class Automovil extends Transporte {
 
+	@Override
+	public String toString() {
+		return "Automovil [maxPaq=" + maxPaq + ", VOLUMEN_MAX_POR_PAQUETE=" + VOLUMEN_MAX_POR_PAQUETE + ", "
+				+ super.toString();
+	}
+
 	private int maxPaq;
 	private final int VOLUMEN_MAX_POR_PAQUETE = 2000;
 
@@ -14,7 +20,7 @@ class Automovil extends Transporte {
 	public boolean cargarPaquete(PaqueteAEntregar paquete) {
 		boolean ret = false;
 		if (paqueteAceptable(paquete))
-			ret |= super.cargarPaquete(paquete,maxPaq);
+			ret |= cargarPaquete(paquete, maxPaq);
 
 		return ret;
 	}

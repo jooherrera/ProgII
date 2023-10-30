@@ -23,7 +23,7 @@ class Cliente {
     public String toString() {
         return "Nombre: " + nombre + "\n" +
                 "DNI: " + dni + "\n" +
-                "Dirección: " + direccion + "\n";
+                "Direccion: " + direccion + "\n";
     }
     
     

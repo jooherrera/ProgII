@@ -12,22 +12,26 @@ public abstract class PaqueteAEntregar {
 		this.direccionEntrega = dirEntrega;
 	}
 
-	public int devolverCostoTotal() {
+	public double devolverCostoTotal() {
 		return this.costoBase();
 	};
 
-	private int costoBase() {
+	private double costoBase() {
 		return this.precio;
 	}
 	
-	public abstract String toString();
+	@Override
+	public String toString() {
+		return "id=" + id + ", volumen=" + volumen + ", precio=" + precio + ", direccionEntrega="
+				+ direccionEntrega + ", cargado=" + cargado + "]";
+	}
 
 	public boolean cabeEn(int volumen) {
 		return this.volumen <= volumen;
 	}
 
 	public boolean tamanioMenorQue(int volumen) {
-		return this.volumen <= volumen;
+		return this.volumen < volumen;
 	}
 
 	public boolean tamanioMayorQue(int volumen) {
@@ -36,6 +40,9 @@ public abstract class PaqueteAEntregar {
 
 	public String devolverCodigoUnico() {
 		return "" + this.id;
+	}
+	public int codigoUnicoNum() {
+		return this.id;
 	}
 	
 	public String devolverDirEntrega() {
@@ -50,5 +57,8 @@ public abstract class PaqueteAEntregar {
 		this.cargado = true;
 		return this.volumen;
 	}
+	
+	
+	
 
 }

@@ -43,29 +43,32 @@ public class EmpresaAmazing implements IEmpresa {
 	@Override
 	public int agregarPaquete(int codPedido, int volumen, int precio, int costoEnvio) {
 		int codigoUnico = sigCodPaquete;
-		agregarPaqueteAPedido(codPedido, codigoUnico,new PaqueteOrdinario(codigoUnico, volumen, precio, costoEnvio, cuit));
+		obtenerPedido(codPedido).agregarPaquete(codigoUnico, volumen, precio, costoEnvio);
+		this.aumentarCodPaquete();
 		return codigoUnico;
 	}
 
 	@Override
-	public int agregarPaquete(int codPedido, int volumen, int precio, int porcentaje, int adicional) {		
+	public int agregarPaquete(int codPedido, int volumen, int precio, int porcentaje, int adicional) {
 		int codigoUnico = sigCodPaquete;
-		agregarPaqueteAPedido(codPedido, codigoUnico,new PaqueteEspecial(codPedido, volumen, precio, porcentaje, adicional, cuit));
+		obtenerPedido(codPedido).agregarPaquete(codigoUnico, volumen, precio, porcentaje, adicional);
+		this.aumentarCodPaquete();
 		return codigoUnico;
 	}
 
 	@Override
 	public boolean quitarPaquete(int codPaquete) {
 		boolean eliminado = false;
-		for(Pedido pedido : pedidos.values())
-				eliminado |= pedido.eliminarPaquete(codPaquete);
-		return eliminado;	
+		for (Pedido pedido : pedidos.values())
+			eliminado |= pedido.eliminarPaquete(codPaquete);
+		return eliminado;
 	}
 
 	@Override
 	public double cerrarPedido(int codPedido) {
-		
-		return obtenerPedido(codPedido).cerrarPedido();
+		double valor = obtenerPedido(codPedido).cerrarPedido();
+		this.totalFacturado += valor;
+		return valor;
 	}
 
 	@Override
@@ -75,39 +78,37 @@ public class EmpresaAmazing implements IEmpresa {
 
 		StringBuilder cargamento = new StringBuilder();
 
-		for (Pedido pedido : pedidos.values() ) 
-//			cargamento.append(transporte.cargarTransporte(pedido));
+		for (Pedido pedido : pedidos.values()) {
 			cargamento.append(pedido.cargarPaquetes(transporte));
-
+		}
 
 		return cargamento.toString();
 	}
 
-	
 	@Override
 	public double costoEntrega(String patente) {
-		if (!existeTransporte(patente)) 
+		if (!existeTransporte(patente))
 			throw new RuntimeException("Patente no encontrada.");
-		
+
 		Transporte transporte = transportes.get(patente);
-		
-		return transporte.consultarCostoEntrega();	
+
+		return transporte.consultarCostoEntrega();
 	}
 
 	@Override
 	public Map<Integer, String> pedidosNoEntregados() {
-		
-		Map<Integer,String> listaNoEntregados = new HashMap<Integer, String>();
+
+		Map<Integer, String> listaNoEntregados = new HashMap<Integer, String>();
 		for (Map.Entry<Integer, Pedido> entrada : pedidos.entrySet()) {
-			
+
 			Integer key = entrada.getKey();
 			Pedido pedido = entrada.getValue();
-			
-			if(pedido.faltanEntregar())
-				listaNoEntregados.put(key,  pedido.duenio());
-				
+
+			if (pedido.faltanEntregar())
+				listaNoEntregados.put(key, pedido.duenio());
+
 		}
-		
+
 		return listaNoEntregados;
 	}
 
@@ -127,6 +128,14 @@ public class EmpresaAmazing implements IEmpresa {
 		}
 		return false;
 	}
+	
+	
+	
+
+	@Override
+	public String toString() {
+		return "EmpresaAmazing [cuit=" + cuit + "]";
+	}
 
 	// --------------- PRIVATE
 	private boolean existeTransporte(String patente) {
@@ -136,15 +145,15 @@ public class EmpresaAmazing implements IEmpresa {
 	private boolean existePedido(int codPedido) {
 		return this.pedidos.containsKey(codPedido);
 	}
-	
+
 	private Transporte obtenerTransporte(String patente) {
-		if(!existeTransporte(patente))
+		if (!existeTransporte(patente))
 			throw new RuntimeException("El transporte con patente: " + patente + " no existe.");
 		return transportes.get(patente);
 	}
-	
+
 	private Pedido obtenerPedido(int codPedido) {
-		if(!existePedido(codPedido))
+		if (!existePedido(codPedido))
 			throw new RuntimeException("El pedido con código: " + codPedido + " no existe.");
 		return pedidos.get(codPedido);
 	}
@@ -154,16 +163,12 @@ public class EmpresaAmazing implements IEmpresa {
 			throw new RuntimeException("El transporte con patente: '" + patente + "' ya existe");
 		this.transportes.put(patente, transporte);
 	}
-	
-	
 
-	
-	private void agregarPaqueteAPedido(int codPedido, int codUnico, PaqueteAEntregar paquete) {
-		obtenerPedido(codPedido).agregarPaquete(codUnico, paquete);
-		this.aumentarCodPaquete();
-	}
-	
-	
+//	private void agregarPaqueteAPedido(int codPedido, int codUnico, PaqueteAEntregar paquete) {
+//		obtenerPedido(codPedido).agregarPaquete(codUnico, paquete);
+//		this.aumentarCodPaquete();
+//	}
+
 	private void aumentarCodPaquete() {
 		this.sigCodPaquete++;
 	}

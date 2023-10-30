@@ -2,6 +2,7 @@ package Amazing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +10,7 @@ public class Pedido {
 	private int numPedido;
 	private Cliente datosCliente;
 	private Map<Integer, PaqueteAEntregar> carrito;
-	private int facturacion;
+	private double facturacion;
 	private boolean cerrado;
 
 	public Pedido(int numPedido, String nombre, String direccion, int dni) {
@@ -21,18 +22,38 @@ public class Pedido {
 	}
 
 	// Revisado
-	public void agregarPaquete(int codigoPaquete, PaqueteAEntregar paquete) {
+	public void agregarPaquete(int codigoPaquete, int volumen, int precio, int costoEnvio) {
 		if (cerrado)
 			throw new RuntimeException("El pedido está finalizado.");
 
-		carrito.put(codigoPaquete, paquete);
-		facturacion += paquete.devolverCostoTotal();
+		String dirEntrega = obtenerDirCliente();
+		PaqueteOrdinario paquete = new PaqueteOrdinario(codigoPaquete, volumen, precio, costoEnvio, dirEntrega);
 
+		carrito.put(codigoPaquete, paquete);
+
+		
+		facturacion += paquete.devolverCostoTotal();
+	}
+
+	public void agregarPaquete(int codigoPaquete, int volumen, int precio, int porcentaje, int adicional) {
+		if (estaCerrado())
+			throw new RuntimeException("El pedido está finalizado.");
+
+		String dirEntrega = obtenerDirCliente();
+		PaqueteEspecial paquete = new PaqueteEspecial(codigoPaquete, volumen, precio, porcentaje, adicional,
+				dirEntrega);
+
+		carrito.put(codigoPaquete, paquete);
+
+		facturacion += paquete.devolverCostoTotal();
 	}
 
 	// Revisado
 	public boolean eliminarPaquete(int id) {
-		if (!cerrado && carrito.containsKey(id)) {
+		if(!carrito.containsKey(id))
+			throw new RuntimeException("Codigo de paquete no registrado.");
+		
+		if (!estaCerrado() ) {
 			PaqueteAEntregar paquete = carrito.get(id);
 			facturacion -= paquete.devolverCostoTotal();
 			carrito.remove(id);
@@ -42,20 +63,46 @@ public class Pedido {
 	}
 
 	public String cargarPaquetes(Transporte t) {
-		if (!estaDisponible())
+		if (!estaCerrado())
 			return "";
+
 		StringBuilder cargados = new StringBuilder();
 
-		for (PaqueteAEntregar paq : carrito.values())
-			if (paqueteCargado(t.cargarPaquete(paq)))
+		Iterator<Map.Entry<Integer, PaqueteAEntregar>> iterator = carrito.entrySet().iterator();
 
+		while (iterator.hasNext()) {
+			Map.Entry<Integer, PaqueteAEntregar> entry = iterator.next();
+			PaqueteAEntregar paq = entry.getValue();
+			if (paqueteCargado(t.cargarPaquete(paq))) {
 				cargados.append(obtenerDatos(paq));
+				iterator.remove();
+			}
+		}
+		
+//		for (PaqueteAEntregar paq : carrito.values())
+//			if (paqueteCargado(t.cargarPaquete(paq))) {
+//				cargados.append(obtenerDatos(paq));
+//				this.quitarPaquete(paq);
+//			}
 
 		return cargados.toString();
 	}
 
+	private void quitarPaquete(PaqueteAEntregar paquete) {
+		int id = paquete.codigoUnicoNum();
+		carrito.remove(id);
+		System.out.println("Eliminar");
+		System.out.println(id);
+	}
+
 	private String obtenerDatos(PaqueteAEntregar paq) {
 		return " + [ " + codUnico() + " - " + paq.devolverCodigoUnico() + " ] " + paq.devolverDirEntrega() + "\n";
+	}
+
+	@Override
+	public String toString() {
+		return "Pedido [numPedido=" + numPedido + ", datosCliente=" + datosCliente + ", carrito=" + carrito
+				+ ", facturacion=" + facturacion + ", cerrado=" + cerrado + "]";
 	}
 
 	private boolean paqueteCargado(boolean resp) {
@@ -109,22 +156,23 @@ public class Pedido {
 //		return paquetesNoEntregados.toString();
 
 	public boolean faltanEntregar() {
-		if (!estaDisponible() && !estaVacio())
+		if (estaCerrado() && !estaVacio())
 			return true;
 		return false;
 	}
 
 	public double cerrarPedido() {
-		if (!estaDisponible())
+		if (estaCerrado())
 			throw new RuntimeException("Pedido con código: " + this.numPedido + " no está disponible.");
 		return finalizarPedido();
 	}
-	
+
 	public String devolverCodigoUnico() {
 		return "" + this.numPedido;
 	}
 
 	// --------------PRIVATE---------------
+
 	private String codUnico() {
 		return "" + this.numPedido;
 	}
@@ -138,13 +186,16 @@ public class Pedido {
 		return !cerrado;
 	}
 
+	private boolean estaCerrado() {
+		return cerrado;
+	}
+
 	private boolean estaVacio() {
 		return this.carrito.size() < 1;
 	}
 
-	@Override
-	public String toString() {
-		return "Número de Pedido: " + numPedido + "\n" + "Cliente: " + datosCliente.toString() + "\n"
-				+ "Facturación Total: " + facturacion + "\n" + "Estado: " + (cerrado ? "Cerrado" : "Abierto") + "\n";
+	private String obtenerDirCliente() {
+		return datosCliente.domicilio();
 	}
+
 }
