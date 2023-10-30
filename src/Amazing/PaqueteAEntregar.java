@@ -6,10 +6,10 @@ public abstract class PaqueteAEntregar {
 	private boolean cargado;
 
 	public PaqueteAEntregar(int id, int volumen, int precio, String dirEntrega) {
-		this.id = id;
-		this.volumen = volumen;
-		this.precio = precio;
-		this.direccionEntrega = dirEntrega;
+		this.id = validarId(id);
+		this.volumen = validarVolumen(volumen);
+		this.precio = validarPrecio(precio);
+		this.direccionEntrega = validarDireccionEntrega(dirEntrega);
 	}
 
 	public double devolverCostoTotal() {
@@ -56,6 +56,37 @@ public abstract class PaqueteAEntregar {
 
 		this.cargado = true;
 		return this.volumen;
+	}
+
+	// Método para validar el ID del paquete
+	private int validarId(int id) {
+		if (id <= 0) {
+			throw new Error("El ID del paquete debe ser mayor que cero.");
+		}
+		return id;
+	}
+
+	// Método para validar el volumen del paquete
+	private int validarVolumen(int volumen) {
+		if (volumen <= 0) {
+			throw new Error("El volumen del paquete debe ser mayor que cero.");
+		}
+		return volumen;
+	}
+	// Método para validar el precio del paquete
+	private int validarPrecio(int precio) {
+		if (precio <= 0) {
+			throw new Error("El precio del paquete debe ser mayor que cero.");
+		}
+		return precio;
+	}
+
+	// Método para validar la dirección de entrega del paquete
+	private String validarDireccionEntrega(String dirEntrega) {
+		if (dirEntrega == null || dirEntrega.isEmpty()) {
+			throw new Error("La dirección de entrega no puede ser nula ni estar vacía.");
+		}
+		return dirEntrega;
 	}
 	
 	

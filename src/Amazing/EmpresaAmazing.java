@@ -11,7 +11,7 @@ public class EmpresaAmazing implements IEmpresa {
 	private double totalFacturado;
 
 	EmpresaAmazing(String cuit) {
-		this.cuit = cuit;
+		this.cuit = validarCuit(cuit);
 		this.pedidos = new HashMap<Integer, Pedido>();
 		this.transportes = new HashMap<String, Transporte>();
 		this.sigCodPaquete = 1;
@@ -175,6 +175,14 @@ public class EmpresaAmazing implements IEmpresa {
 
 	private int siguienteIDPedido() {
 		return this.pedidos.size() + 1;
+	}
+
+	// Método para validar el CUIT
+	private String validarCuit(String cuit) {
+		if (cuit == null || cuit.isEmpty()) {
+			throw new Error("El CUIT de la empresa no puede ser nulo ni estar vacío.");
+		}
+		return cuit;
 	}
 
 }

@@ -6,7 +6,7 @@ class Utilitario extends Transporte {
 
 	public Utilitario(String patente, int volMax, int valorViaje, int valorExtra) {
 		super(patente, volMax, valorViaje);
-		this.valorExtra = valorExtra;
+		this.valorExtra = validarValorExtra(valorExtra);
 	}
 
 	@Override
@@ -24,6 +24,14 @@ class Utilitario extends Transporte {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	// Método para validar el valor extra
+	private int validarValorExtra(int valorExtra) {
+		if (valorExtra < 0) {
+			throw new Error("El valor extra no puede ser negativo.");
+		}
+		return valorExtra;
+	}
+
 	
 	
 
@@ -31,4 +39,5 @@ class Utilitario extends Transporte {
 	private double calcularValorExtra() {
 		return super.cantPaquetesCargados() > MAX_PAQUETES ? valorExtra : 0;
 	}
+
 }

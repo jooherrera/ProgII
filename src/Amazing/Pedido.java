@@ -14,7 +14,7 @@ public class Pedido {
 	private boolean cerrado;
 
 	public Pedido(int numPedido, String nombre, String direccion, int dni) {
-		this.numPedido = numPedido;
+		this.numPedido = validarNumPedido(numPedido);
 		this.datosCliente = new Cliente(dni, nombre, direccion);
 		this.carrito = new HashMap<Integer, PaqueteAEntregar>();
 		this.facturacion = 0;
@@ -196,6 +196,14 @@ public class Pedido {
 
 	private String obtenerDirCliente() {
 		return datosCliente.domicilio();
+	}
+
+	// Método para validar el número de pedido
+	private int validarNumPedido(int numPedido) {
+		if (numPedido <= 0) {
+			throw new Error("El número de pedido debe ser mayor que cero.");
+		}
+		return numPedido;
 	}
 
 }

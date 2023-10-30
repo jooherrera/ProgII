@@ -8,8 +8,8 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 
 	public PaqueteEspecial(int id, int volumen, int precio, int porcentaje, int adicional, String dirEntrega) {
 		super(id, volumen, precio, dirEntrega);
-		this.porcentaje = porcentaje;
-		this.adicional = adicional;
+		this.porcentaje = validarPorcentaje(porcentaje);
+		this.adicional = validarAdicional(adicional);
 	}
 
 	@Override
@@ -52,6 +52,24 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 
 	private int adicional() {
 		return this.adicional;
+	}
+
+	// Método para validar el porcentaje
+	private double validarPorcentaje(double porcentaje) {
+		if (porcentaje < 0) {
+			throw new Error("El porcentaje no puede ser negativo.");
+		}
+		return porcentaje;
+
+	}
+
+	// Método para validar el valor adicional
+	private int validarAdicional(int adicional) {
+		if (adicional < 0) {
+			throw new Error("El valor adicional no puede ser negativo.");
+		}
+		return adicional;
+
 	}
 
 }

@@ -8,7 +8,7 @@ class Camion extends Transporte {
     
     public Camion(String patente, int volMax, int valorViaje, int adicXPaq) {
         super(patente, volMax, valorViaje);
-        this.adicXPaq = adicXPaq;
+        this.adicXPaq = validarAdicionalPorPaquete(adicXPaq);
     }
 
     @Override
@@ -39,5 +39,12 @@ class Camion extends Transporte {
 	
 	private boolean paqueteAceptable(PaqueteAEntregar paq) {
 		return (paq instanceof PaqueteEspecial) && paq.tamanioMayorQue(VOLUMEN_MIN_POR_PAQUETE);
+	}
+	// Método para validar el valor adicional por paquete
+	private int validarAdicionalPorPaquete(int adicXPaq) {
+		if (adicXPaq < 0) {
+			throw new Error("El valor adicional por paquete no puede ser negativo.");
+		}
+		return adicXPaq;
 	}
 }

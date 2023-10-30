@@ -11,10 +11,10 @@ public abstract class Transporte {
 	private Map<Integer, PaqueteAEntregar> cargamento;
 
 	public Transporte(String patente, int volMax, int valorViaje) {
-		this.patente = patente;
-		this.volMax = volMax;
+		this.patente = validarPatente(patente);
+		this.volMax = validarVolMax(volMax);
 		this.volActual = volMax;
-		this.valorViaje = valorViaje;
+		this.valorViaje = validarValorViaje(valorViaje);
 //		this.cantPaqActual = 0;
 //		this.facturacion = 0;
 		this.cargamento = new HashMap<>();
@@ -92,5 +92,29 @@ public abstract class Transporte {
     private boolean hayCapacidad(int limite) {
     	return  cantPaquetes() < limite;
     }
+
+	// Validación de la patente
+	private String validarPatente(String patente) {
+		if (patente == null || patente.isEmpty()) {
+			throw new Error("La patente no puede ser nula ni estar vacía.");
+		}
+		return patente;
+	}
+
+	// Validación del volumen máximo
+	private int validarVolMax(int volMax) {
+		if (volMax <= 0) {
+			throw new Error("El volumen máximo debe ser mayor que cero.");
+		}
+		return volMax;
+	}
+
+	// Validación del valor del viaje
+	private int validarValorViaje(int valorViaje) {
+		if (valorViaje <= 0) {
+			throw new Error("El valor del viaje debe ser mayor que cero.");
+		}
+		return valorViaje;
+	}
 
 }
