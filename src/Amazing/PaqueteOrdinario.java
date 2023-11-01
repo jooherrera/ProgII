@@ -13,14 +13,12 @@ public class PaqueteOrdinario extends PaqueteAEntregar {
 		return this.calcularCostoTotal();
 	}
 
-
-	
-	//---------------- PRIVATE-----------------------
-
 	@Override
 	public String toString() {
-		return "PaqueteOrdinario [costoEnvio=" + costoEnvio + " , " + super.toString();
+		return "PaqueteOrdinario { costoEnvio=" + costoEnvio + " , " + super.toString();
 	}
+
+	// ---------------- PRIVATE-----------------------
 
 	private double calcularCostoTotal() {
 		return this.costoEnvio + super.devolverCostoTotal();
@@ -28,9 +26,8 @@ public class PaqueteOrdinario extends PaqueteAEntregar {
 
 	// Método para validar el costo de envío
 	private int validarCostoEnvio(int costoEnvio) {
-		if (costoEnvio < 0) {
-			throw new Error("El costo de envío no puede ser negativo.");
-		}
+		if (costoEnvio < 0)
+			throw new RuntimeException("El costo de envío no puede ser negativo.");
 		return costoEnvio;
 	}
 }

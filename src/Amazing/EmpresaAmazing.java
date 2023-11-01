@@ -20,22 +20,22 @@ public class EmpresaAmazing implements IEmpresa {
 
 	@Override
 	public void registrarAutomovil(String patente, int volMax, int valorViaje, int maxPaq) {
-		agregarTransporte(patente, new Automovil(patente, volMax, valorViaje, maxPaq));
+		this.agregarTransporte(patente, new Automovil(patente, volMax, valorViaje, maxPaq));
 	}
 
 	@Override
 	public void registrarUtilitario(String patente, int volMax, int valorViaje, int valorExtra) {
-		agregarTransporte(patente, new Utilitario(patente, volMax, valorViaje, valorExtra));
+		this.agregarTransporte(patente, new Utilitario(patente, volMax, valorViaje, valorExtra));
 	}
 
 	@Override
 	public void registrarCamion(String patente, int volMax, int valorViaje, int adicXPaq) {
-		agregarTransporte(patente, new Camion(patente, volMax, valorViaje, adicXPaq));
+		this.agregarTransporte(patente, new Camion(patente, volMax, valorViaje, adicXPaq));
 	}
 
 	@Override
 	public int registrarPedido(String cliente, String direccion, int dni) {
-		int id = siguienteIDPedido();
+		int id = this.siguienteIDPedido();
 		this.pedidos.put(id, new Pedido(id, cliente, direccion, dni));
 		return id;
 	}
@@ -43,7 +43,7 @@ public class EmpresaAmazing implements IEmpresa {
 	@Override
 	public int agregarPaquete(int codPedido, int volumen, int precio, int costoEnvio) {
 		int codigoUnico = sigCodPaquete;
-		obtenerPedido(codPedido).agregarPaquete(codigoUnico, volumen, precio, costoEnvio);
+		this.obtenerPedido(codPedido).agregarPaquete(codigoUnico, volumen, precio, costoEnvio);
 		this.aumentarCodPaquete();
 		return codigoUnico;
 	}
@@ -51,7 +51,7 @@ public class EmpresaAmazing implements IEmpresa {
 	@Override
 	public int agregarPaquete(int codPedido, int volumen, int precio, int porcentaje, int adicional) {
 		int codigoUnico = sigCodPaquete;
-		obtenerPedido(codPedido).agregarPaquete(codigoUnico, volumen, precio, porcentaje, adicional);
+		this.obtenerPedido(codPedido).agregarPaquete(codigoUnico, volumen, precio, porcentaje, adicional);
 		this.aumentarCodPaquete();
 		return codigoUnico;
 	}
@@ -66,7 +66,7 @@ public class EmpresaAmazing implements IEmpresa {
 
 	@Override
 	public double cerrarPedido(int codPedido) {
-		double valor = obtenerPedido(codPedido).cerrarPedido();
+		double valor = this.obtenerPedido(codPedido).cerrarPedido();
 		this.totalFacturado += valor;
 		return valor;
 	}
@@ -74,7 +74,7 @@ public class EmpresaAmazing implements IEmpresa {
 	@Override
 	public String cargarTransporte(String patente) {
 
-		Transporte transporte = obtenerTransporte(patente);
+		Transporte transporte = this.obtenerTransporte(patente);
 
 		StringBuilder cargamento = new StringBuilder();
 
@@ -87,7 +87,7 @@ public class EmpresaAmazing implements IEmpresa {
 
 	@Override
 	public double costoEntrega(String patente) {
-		if (!existeTransporte(patente))
+		if (!this.existeTransporte(patente))
 			throw new RuntimeException("Patente no encontrada.");
 
 		Transporte transporte = transportes.get(patente);
@@ -106,9 +106,7 @@ public class EmpresaAmazing implements IEmpresa {
 
 			if (pedido.faltanEntregar())
 				listaNoEntregados.put(key, pedido.duenio());
-
 		}
-
 		return listaNoEntregados;
 	}
 
@@ -128,46 +126,47 @@ public class EmpresaAmazing implements IEmpresa {
 		}
 		return false;
 	}
-	
-	
-	
 
+//	@Override
+//	public String toString() {
+//		return "EmpresaAmazing [cuit=" + cuit + "]";
+//	}
+	
 	@Override
 	public String toString() {
-		return "EmpresaAmazing [cuit=" + cuit + "]";
+		return "EmpresaAmazing { cuit=" + cuit + ", pedidos=" + pedidos + ", transportes=" + transportes
+				+ ", sigCodPaquete=" + sigCodPaquete + ", totalFacturado=" + totalFacturado + " }";
 	}
+	
 
 	// --------------- PRIVATE
 	private boolean existeTransporte(String patente) {
-		return transportes.containsKey(patente);
+		return this.transportes.containsKey(patente);
 	}
+
+
 
 	private boolean existePedido(int codPedido) {
 		return this.pedidos.containsKey(codPedido);
 	}
 
 	private Transporte obtenerTransporte(String patente) {
-		if (!existeTransporte(patente))
+		if (!this.existeTransporte(patente))
 			throw new RuntimeException("El transporte con patente: " + patente + " no existe.");
 		return transportes.get(patente);
 	}
 
 	private Pedido obtenerPedido(int codPedido) {
-		if (!existePedido(codPedido))
+		if (!this.existePedido(codPedido))
 			throw new RuntimeException("El pedido con código: " + codPedido + " no existe.");
 		return pedidos.get(codPedido);
 	}
 
 	private void agregarTransporte(String patente, Transporte transporte) {
-		if (existeTransporte(patente))
+		if (this.existeTransporte(patente))
 			throw new RuntimeException("El transporte con patente: '" + patente + "' ya existe");
 		this.transportes.put(patente, transporte);
 	}
-
-//	private void agregarPaqueteAPedido(int codPedido, int codUnico, PaqueteAEntregar paquete) {
-//		obtenerPedido(codPedido).agregarPaquete(codUnico, paquete);
-//		this.aumentarCodPaquete();
-//	}
 
 	private void aumentarCodPaquete() {
 		this.sigCodPaquete++;
@@ -179,9 +178,8 @@ public class EmpresaAmazing implements IEmpresa {
 
 	// Método para validar el CUIT
 	private String validarCuit(String cuit) {
-		if (cuit == null || cuit.isEmpty()) {
-			throw new Error("El CUIT de la empresa no puede ser nulo ni estar vacío.");
-		}
+		if (cuit == null || cuit.isEmpty()) 
+			throw new RuntimeException("El CUIT de la empresa no puede ser nulo ni estar vacío.");
 		return cuit;
 	}
 

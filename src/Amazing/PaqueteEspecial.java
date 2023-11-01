@@ -19,9 +19,8 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 
 	@Override
 	public String toString() {
-		return "PaqueteEspecial [porcentaje=" + porcentaje + ", adicional=" + adicional + ", VOL_ADICIONAL_DUPLICADO="
-				+ VOL_ADICIONAL_DUPLICADO + ", VOL_ADICIONAL=" + VOL_ADICIONAL + "," + super.toString()
-				+ "]";
+		return "PaqueteEspecial { adicional=" + adicional + ", porcentaje=" + porcentaje + ", VOL_ADICIONAL_DUPLICADO="
+				+ VOL_ADICIONAL_DUPLICADO + ", VOL_ADICIONAL=" + VOL_ADICIONAL + ", " + super.toString();
 	}
 
 	// ---------------- PRIVATE-----------------------
@@ -47,7 +46,7 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 	}
 
 	private double porcentaje() {
-		return (this.porcentaje /100) + 1 ;
+		return (this.porcentaje / 100) + 1;
 	}
 
 	private int adicional() {
@@ -56,18 +55,16 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 
 	// Método para validar el porcentaje
 	private double validarPorcentaje(double porcentaje) {
-		if (porcentaje < 0) {
-			throw new Error("El porcentaje no puede ser negativo.");
-		}
+		if (porcentaje < 0)
+			throw new RuntimeException("El porcentaje no puede ser negativo.");
 		return porcentaje;
 
 	}
 
 	// Método para validar el valor adicional
 	private int validarAdicional(int adicional) {
-		if (adicional < 0) {
-			throw new Error("El valor adicional no puede ser negativo.");
-		}
+		if (adicional < 0)
+			throw new RuntimeException("El valor adicional no puede ser negativo.");
 		return adicional;
 
 	}

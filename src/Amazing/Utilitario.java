@@ -24,20 +24,23 @@ class Utilitario extends Transporte {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	// Método para validar el valor extra
-	private int validarValorExtra(int valorExtra) {
-		if (valorExtra < 0) {
-			throw new Error("El valor extra no puede ser negativo.");
-		}
-		return valorExtra;
+
+	@Override
+	public String toString() {
+		return "Utilitario { MAX_PAQUETES=" + MAX_PAQUETES + ", valorExtra=" + valorExtra + ", " + super.toString();
 	}
 
-	
-	
-
 	// ---------PRIVATE-----------
+
 	private double calcularValorExtra() {
 		return super.cantPaquetesCargados() > MAX_PAQUETES ? valorExtra : 0;
+	}
+
+	// Método para validar el valor extra
+	private int validarValorExtra(int valorExtra) {
+		if (valorExtra < 0)
+			throw new RuntimeException("El valor extra no puede ser negativo.");
+		return valorExtra;
 	}
 
 }
