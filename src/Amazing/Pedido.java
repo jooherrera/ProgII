@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.RuntimeErrorException;
+
 public class Pedido {
 	private int numPedido;
 	private Cliente datosCliente;
@@ -47,7 +49,7 @@ public class Pedido {
 	}
 
 	public boolean eliminarPaquete(int id) {
-		if (!existePaquete(id) || estaCerrado())
+		if (estaCerrado() || !existePaquete(id))
 			return false;
 
 		PaqueteAEntregar paquete = carrito.get(id);

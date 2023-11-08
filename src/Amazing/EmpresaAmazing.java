@@ -58,6 +58,8 @@ public class EmpresaAmazing implements IEmpresa {
 
 	@Override
 	public boolean quitarPaquete(int codPaquete) {
+		if(!this.codigoPaqExiste(codPaquete))
+			throw new RuntimeException("Cod paquete: " + codPaquete + " no registrado.");
 		boolean eliminado = false;
 		for (Pedido pedido : pedidos.values())
 			eliminado |= pedido.eliminarPaquete(codPaquete);
@@ -183,4 +185,8 @@ public class EmpresaAmazing implements IEmpresa {
 		return cuit;
 	}
 
+	private boolean codigoPaqExiste(int codPaquete) {
+		return codPaquete >= 1 && codPaquete < this.sigCodPaquete;
+	}
+	
 }
