@@ -15,7 +15,7 @@ public abstract class PaqueteAEntregar {
 	public double devolverCostoTotal() {
 		return this.costoBase();
 	};
-	
+
 	public boolean cabeEn(int volumen) {
 		return this.volumen <= volumen;
 	}
@@ -47,14 +47,14 @@ public abstract class PaqueteAEntregar {
 		this.cargado = true;
 		return this.volumen;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "id=" + id + ", volumen=" + volumen + ", precio=" + precio + ", direccionEntrega="
-				+ direccionEntrega + ", cargado=" + cargado + " }";
+		return "id=" + id + ", volumen=" + volumen + ", precio=" + precio + ", direccionEntrega=" + direccionEntrega
+				+ ", cargado=" + cargado + " }";
 	}
-	
-	//------------PRIVATE---------------
+
+	// ------------PRIVATE---------------
 
 	// Método para validar el ID del paquete
 	private int validarId(int id) {
@@ -87,10 +87,32 @@ public abstract class PaqueteAEntregar {
 	private boolean estaCargado() {
 		return cargado;
 	}
-	
+
 	private double costoBase() {
 		return this.precio;
 	}
 
+	// -----------NUEVOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+
+	@Override
+	public boolean equals(Object obj) {
+		return this.esMismoTipo(obj) && this.esIgual((PaqueteAEntregar) obj);
+	}
+
+	private boolean esMismoTipo(Object obj) {
+		return obj != null && getClass() == obj.getClass();
+	}
+
+	private boolean esIgual(PaqueteAEntregar paq) {
+		return paq.esMismoVolumen(this.volumen) && paq.esMismoPrecio(this.precio);
+	}
+
+	private boolean esMismoVolumen(int volumen) {
+		return this.volumen == volumen;
+	}
+
+	private boolean esMismoPrecio(int precio) {
+		return this.precio == precio;
+	}
 
 }

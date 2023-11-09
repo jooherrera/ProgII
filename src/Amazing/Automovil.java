@@ -16,12 +16,6 @@ class Automovil extends Transporte {
 			ret |= super.cargarPaquete(paquete, maxPaq);
 		return ret;
 	}
-	
-	@Override
-	public boolean esIgual(Transporte otro) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public String toString() {
@@ -39,6 +33,15 @@ class Automovil extends Transporte {
 
 	private boolean paqueteAceptable(PaqueteAEntregar paq) {
 		return (paq instanceof PaqueteOrdinario) && paq.cabeEn(VOLUMEN_MAX_POR_PAQUETE);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return esMismoTipo(obj) && super.equals(obj);
+	}
+
+	private boolean esMismoTipo(Object obj) {
+		return obj != null && getClass() == obj.getClass();
 	}
 
 }

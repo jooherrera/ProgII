@@ -30,4 +30,24 @@ public class PaqueteOrdinario extends PaqueteAEntregar {
 			throw new RuntimeException("El costo de envío no puede ser negativo.");
 		return costoEnvio;
 	}
+
+	// _______________NUEVOOOOOOOOOOOOOOOOOO
+
+	@Override
+	public boolean equals(Object obj) {
+		return this.esMismoTipo(obj) && this.esIgual((PaqueteOrdinario) obj);
+	}
+
+	private boolean esMismoTipo(Object obj) {
+		return obj != null && getClass() == obj.getClass();
+	}
+
+	private boolean esIgual(PaqueteOrdinario paq) {
+		return paq.esMismoCostoEnvio(this.costoEnvio) && super.equals(paq);
+	}
+
+	private boolean esMismoCostoEnvio(int valor) {
+		return this.costoEnvio == valor;
+	}
+
 }

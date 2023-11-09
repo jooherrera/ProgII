@@ -69,4 +69,27 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 
 	}
 
+	// _______________NUEVOOOOOOOOOOOOOOOOOO
+
+	@Override
+	public boolean equals(Object obj) {
+		return this.esMismoTipo(obj) && this.esIgual((PaqueteEspecial) obj);
+	}
+
+	private boolean esMismoTipo(Object obj) {
+		return obj != null && getClass() == obj.getClass();
+	}
+
+	private boolean esIgual(PaqueteEspecial paq) {
+		return paq.esMismoAdicional(this.adicional) && paq.esMismoPorcentaje(this.porcentaje) && super.equals(paq);
+	}
+
+	private boolean esMismoAdicional(int valor) {
+		return this.adicional == valor;
+	}
+
+	private boolean esMismoPorcentaje(double valor) {
+		return this.porcentaje == valor;
+	}
+
 }

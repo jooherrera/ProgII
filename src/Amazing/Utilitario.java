@@ -20,12 +20,6 @@ class Utilitario extends Transporte {
 	}
 
 	@Override
-	public boolean esIgual(Transporte otro) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public String toString() {
 		return "Utilitario { MAX_PAQUETES=" + MAX_PAQUETES + ", valorExtra=" + valorExtra + ", " + super.toString();
 	}
@@ -41,6 +35,15 @@ class Utilitario extends Transporte {
 		if (valorExtra < 0)
 			throw new RuntimeException("El valor extra no puede ser negativo.");
 		return valorExtra;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return esMismoTipo(obj) && super.equals(obj);
+	}
+
+	private boolean esMismoTipo(Object obj) {
+		return obj != null && getClass() == obj.getClass();
 	}
 
 }

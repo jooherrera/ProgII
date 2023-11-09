@@ -58,7 +58,7 @@ public class EmpresaAmazing implements IEmpresa {
 
 	@Override
 	public boolean quitarPaquete(int codPaquete) {
-		if(!this.codigoPaqExiste(codPaquete))
+		if (!this.codigoPaqExiste(codPaquete))
 			throw new RuntimeException("Cod paquete: " + codPaquete + " no registrado.");
 		boolean eliminado = false;
 		for (Pedido pedido : pedidos.values())
@@ -119,34 +119,38 @@ public class EmpresaAmazing implements IEmpresa {
 
 	@Override
 	public boolean hayTransportesIdenticos() {
-		for (Transporte transporte1 : transportes.values()) {
-			for (Transporte transporte2 : transportes.values()) {
-				if (transporte1 != transporte2 && transporte1.esIgual(transporte2)) {
-					return true;
-				}
-			}
-		}
-		return false;
+		boolean ret = false;
+
+		for (Transporte t1 : transportes.values())
+			ret |= algunParecidoA(t1);
+
+		return ret;
+
+	}
+
+	private boolean algunParecidoA(Transporte t) {
+		boolean ret = false;
+		for (Transporte elem : this.transportes.values())
+			ret |= elem.equals(t);
+
+		return ret;
 	}
 
 //	@Override
 //	public String toString() {
 //		return "EmpresaAmazing [cuit=" + cuit + "]";
 //	}
-	
+
 	@Override
 	public String toString() {
 		return "EmpresaAmazing { cuit=" + cuit + ", pedidos=" + pedidos + ", transportes=" + transportes
 				+ ", sigCodPaquete=" + sigCodPaquete + ", totalFacturado=" + totalFacturado + " }";
 	}
-	
 
 	// --------------- PRIVATE
 	private boolean existeTransporte(String patente) {
 		return this.transportes.containsKey(patente);
 	}
-
-
 
 	private boolean existePedido(int codPedido) {
 		return this.pedidos.containsKey(codPedido);
@@ -180,7 +184,7 @@ public class EmpresaAmazing implements IEmpresa {
 
 	// Método para validar el CUIT
 	private String validarCuit(String cuit) {
-		if (cuit == null || cuit.isEmpty()) 
+		if (cuit == null || cuit.isEmpty())
 			throw new RuntimeException("El CUIT de la empresa no puede ser nulo ni estar vacío.");
 		return cuit;
 	}
@@ -188,5 +192,5 @@ public class EmpresaAmazing implements IEmpresa {
 	private boolean codigoPaqExiste(int codPaquete) {
 		return codPaquete >= 1 && codPaquete < this.sigCodPaquete;
 	}
-	
+
 }

@@ -23,12 +23,6 @@ class Camion extends Transporte {
 	}
 
 	@Override
-	public boolean esIgual(Transporte otro) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public String toString() {
 		return "Camion { adicXPaq=" + adicXPaq + ", VOLUMEN_MIN_POR_PAQUETE=" + VOLUMEN_MIN_POR_PAQUETE + ", "
 				+ super.toString();
@@ -48,5 +42,14 @@ class Camion extends Transporte {
 		if (adicXPaq < 0)
 			throw new RuntimeException("El valor adicional por paquete no puede ser negativo.");
 		return adicXPaq;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return esMismoTipo(obj) && super.equals(obj);
+	}
+
+	private boolean esMismoTipo(Object obj) {
+		return obj != null && getClass() == obj.getClass();
 	}
 }
