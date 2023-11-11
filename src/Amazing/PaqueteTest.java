@@ -95,10 +95,5 @@ public class PaqueteTest {
 		paqOrdinario.cargarATransporte();
 	}
 
-//
-//	@Test(expected = RuntimeException.class)
-//	public void clienteDniCero() {
-//		new Cliente(dniCero, nombre, direccion);
-//	}
 
 }

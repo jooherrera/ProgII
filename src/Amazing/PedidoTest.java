@@ -42,26 +42,6 @@ public class PedidoTest {
 		assertFalse(pedido.eliminarPaquete(2));
 	}
 	
-//	@Test
-//	public void entregarPaquete_ok() {
-//		PaqueteEspecial paq = new PaqueteEspecial(1, 1000, 100, 10, 100, "Av Siempreviva 742");
-//		pedido.agregarPaquete(1, 1000, 100, 10,100);
-//		pedido.cerrarPedido();
-//		assertTrue(paq.equals(pedido.entregarPaquete(1)));
-//	}
-//	
-//	@Test
-//	public void entregarPaquete_nok_pedidoAbierto() {
-//		assertNull(pedido.entregarPaquete(1));
-//	}
-//	
-//	@Test
-//	public void entregarPaquete_nok_ID_noExiste() {
-//		pedido.agregarPaquete(1, 1000, 100, 10,100);
-//		pedido.cerrarPedido();
-//		assertNull(pedido.entregarPaquete(2));
-//	}
-	
 	@Test
 	public void faltaEntregar() {
 		pedido.agregarPaquete(1, 1000, 100, 10,100);
