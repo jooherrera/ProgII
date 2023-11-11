@@ -1,6 +1,6 @@
 package Amazing;
 
-class Cliente {
+public class Cliente {
 	private int dni;
 	private String nombre;
 	private String direccion;
@@ -52,12 +52,12 @@ class Cliente {
 
 	private String validarNombre(String nombre) {
 		if (this.esNulo(nombre) || this.estaVacio(nombre))
-			throw new RuntimeException("Parametro: " + nombre + " inválido");
+			throw new RuntimeException("Parametro: 'nombre' inválido");
 		return nombre;
 	}
 
 	private String validarDireccion(String direccion) {
-		if (this.esNulo(nombre) || this.estaVacio(direccion))
+		if (this.esNulo(direccion) || this.estaVacio(direccion))
 			throw new RuntimeException("Parametro: 'direccion' inválido");
 		return direccion;
 	}

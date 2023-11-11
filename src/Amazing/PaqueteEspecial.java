@@ -26,7 +26,7 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 	// ---------------- PRIVATE-----------------------
 
 	private double calcularCostoTotal() {
-		if (super.tamanioMenorQue(VOL_ADICIONAL))
+		if (super.tamanioMenorIgualQue(VOL_ADICIONAL))
 			return costoBase();
 		if (super.tamanioMayorQue(VOL_ADICIONAL_DUPLICADO))
 			return adicionalDuplicado();

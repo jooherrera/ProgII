@@ -1,12 +1,8 @@
 package Amazing;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-
-import javax.management.RuntimeErrorException;
 
 public class Pedido {
 	private int numPedido;
@@ -53,6 +49,7 @@ public class Pedido {
 			return false;
 
 		PaqueteAEntregar paquete = carrito.get(id);
+
 		facturacion -= paquete.devolverCostoTotal();
 		carrito.remove(id);
 		return true;
@@ -60,6 +57,28 @@ public class Pedido {
 	}
 
 	public String cargarPaquetes(Transporte t) {
+		if (!estaCerrado())
+			return "";
+		StringBuilder cargados = new StringBuilder();
+
+		Iterator<Map.Entry<Integer, PaqueteAEntregar>> iterator = carrito.entrySet().iterator();
+
+		while (iterator.hasNext()) {
+			Map.Entry<Integer, PaqueteAEntregar> entry = iterator.next();
+			PaqueteAEntregar paq = entry.getValue();
+
+			if (paqueteCargado(t.cargarPaquete(paq))) {
+				cargados.append(obtenerDatos(paq));
+				iterator.remove();
+			}
+
+		}
+
+		return cargados.toString();
+	}
+
+	///////
+	public String cargarEspecial(Transporte t) {
 		if (!estaCerrado())
 			return "";
 
@@ -70,27 +89,30 @@ public class Pedido {
 		while (iterator.hasNext()) {
 			Map.Entry<Integer, PaqueteAEntregar> entry = iterator.next();
 			PaqueteAEntregar paq = entry.getValue();
-			if (paqueteCargado(t.cargarPaquete(paq))) {
+
+			if (paq instanceof PaqueteEspecial && paqueteCargado(t.cargarPaquete(paq))) {
 				cargados.append(obtenerDatos(paq));
 				iterator.remove();
 			}
+
 		}
 
 		return cargados.toString();
+
 	}
 
 	public String duenio() {
 		return obtenerNombreDelCliente();
 	}
 
-	public PaqueteAEntregar entregarPaquete(int id) {
-		if (cerrado && carrito.containsKey(id)) {
-			PaqueteAEntregar paquete = carrito.get(id);
-			carrito.remove(id);
-			return paquete;
-		}
-		return null;
-	}
+//	public PaqueteAEntregar entregarPaquete(int id) {
+//		if (cerrado && carrito.containsKey(id)) {
+//			PaqueteAEntregar paquete = carrito.get(id);
+//			carrito.remove(id);
+//			return paquete;
+//		}
+//		return null;
+//	}
 
 	public boolean faltanEntregar() {
 		if (estaCerrado() && !estaVacio())

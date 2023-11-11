@@ -1,6 +1,6 @@
 package Amazing;
 
-class Utilitario extends Transporte {
+public class Utilitario extends Transporte {
 	private final int MAX_PAQUETES = 3;
 	private int valorExtra;
 
@@ -16,7 +16,7 @@ class Utilitario extends Transporte {
 
 	@Override
 	public double consultarCostoEntrega() {
-		return super.consultarCostoEntrega() + this.calcularValorExtra();
+		return calcularValorExtra() + super.consultarCostoEntrega() ;
 	}
 
 	@Override
@@ -26,7 +26,7 @@ class Utilitario extends Transporte {
 
 	// ---------PRIVATE-----------
 
-	private double calcularValorExtra() {
+	private int calcularValorExtra() {
 		return super.cantPaquetesCargados() > MAX_PAQUETES ? valorExtra : 0;
 	}
 

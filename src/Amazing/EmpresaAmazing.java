@@ -10,7 +10,7 @@ public class EmpresaAmazing implements IEmpresa {
 	private int sigCodPaquete;
 	private double totalFacturado;
 
-	EmpresaAmazing(String cuit) {
+	public EmpresaAmazing(String cuit) {
 		this.cuit = validarCuit(cuit);
 		this.pedidos = new HashMap<Integer, Pedido>();
 		this.transportes = new HashMap<String, Transporte>();
@@ -53,6 +53,7 @@ public class EmpresaAmazing implements IEmpresa {
 		int codigoUnico = sigCodPaquete;
 		this.obtenerPedido(codPedido).agregarPaquete(codigoUnico, volumen, precio, porcentaje, adicional);
 		this.aumentarCodPaquete();
+
 		return codigoUnico;
 	}
 
@@ -81,6 +82,10 @@ public class EmpresaAmazing implements IEmpresa {
 		StringBuilder cargamento = new StringBuilder();
 
 		for (Pedido pedido : pedidos.values()) {
+			cargamento.append(pedido.cargarEspecial(transporte));
+		}
+
+		for (Pedido pedido : pedidos.values()) {
 			cargamento.append(pedido.cargarPaquetes(transporte));
 		}
 
@@ -89,11 +94,7 @@ public class EmpresaAmazing implements IEmpresa {
 
 	@Override
 	public double costoEntrega(String patente) {
-		if (!this.existeTransporte(patente))
-			throw new RuntimeException("Patente no encontrada.");
-
-		Transporte transporte = transportes.get(patente);
-
+		Transporte transporte = this.obtenerTransporte(patente);
 		return transporte.consultarCostoEntrega();
 	}
 
@@ -135,11 +136,6 @@ public class EmpresaAmazing implements IEmpresa {
 
 		return ret;
 	}
-
-//	@Override
-//	public String toString() {
-//		return "EmpresaAmazing [cuit=" + cuit + "]";
-//	}
 
 	@Override
 	public String toString() {

@@ -1,8 +1,8 @@
 package Amazing;
 
-class Automovil extends Transporte {
+public class Automovil extends Transporte {
 	private int maxPaq;
-	private final int VOLUMEN_MAX_POR_PAQUETE = 2000;
+	private final int VOLUMEN_MAX_POR_PAQUETE = 1999;
 
 	public Automovil(String patente, int volMax, int valorViaje, int maxPaq) {
 		super(patente, volMax, valorViaje);
@@ -15,6 +15,11 @@ class Automovil extends Transporte {
 		if (this.paqueteAceptable(paquete))
 			ret |= super.cargarPaquete(paquete, maxPaq);
 		return ret;
+	}
+	
+	@Override
+	public double consultarCostoEntrega() {
+		return super.consultarCostoEntrega();
 	}
 
 	@Override

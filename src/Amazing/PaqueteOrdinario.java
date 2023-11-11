@@ -1,5 +1,6 @@
 package Amazing;
 
+
 public class PaqueteOrdinario extends PaqueteAEntregar {
 	private int costoEnvio;
 
@@ -26,7 +27,7 @@ public class PaqueteOrdinario extends PaqueteAEntregar {
 
 	// Método para validar el costo de envío
 	private int validarCostoEnvio(int costoEnvio) {
-		if (costoEnvio < 0)
+		if (costoEnvio < 1)
 			throw new RuntimeException("El costo de envío no puede ser negativo.");
 		return costoEnvio;
 	}

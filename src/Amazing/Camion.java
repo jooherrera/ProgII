@@ -1,6 +1,6 @@
 package Amazing;
 
-class Camion extends Transporte {
+public class Camion extends Transporte {
 	private int adicXPaq;
 	private final int VOLUMEN_MIN_POR_PAQUETE = 2000;
 
@@ -34,7 +34,7 @@ class Camion extends Transporte {
 	}
 
 	private boolean paqueteAceptable(PaqueteAEntregar paq) {
-		return (paq instanceof PaqueteEspecial) && paq.tamanioMayorQue(VOLUMEN_MIN_POR_PAQUETE);
+		return paq.tamanioMayorQue(VOLUMEN_MIN_POR_PAQUETE);
 	}
 
 	// Método para validar el valor adicional por paquete

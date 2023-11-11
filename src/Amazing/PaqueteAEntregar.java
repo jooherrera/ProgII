@@ -5,6 +5,7 @@ public abstract class PaqueteAEntregar {
 	private String direccionEntrega;
 	private boolean cargado;
 
+
 	public PaqueteAEntregar(int id, int volumen, int precio, String dirEntrega) {
 		this.id = validarId(id);
 		this.volumen = validarVolumen(volumen);
@@ -20,7 +21,7 @@ public abstract class PaqueteAEntregar {
 		return this.volumen <= volumen;
 	}
 
-	public boolean tamanioMenorQue(int volumen) {
+	public boolean tamanioMenorIgualQue(int volumen) {
 		return this.volumen < volumen;
 	}
 
