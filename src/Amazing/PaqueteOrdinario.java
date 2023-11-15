@@ -11,7 +11,7 @@ public class PaqueteOrdinario extends PaqueteAEntregar {
 
 	@Override
 	public double devolverCostoTotal() {
-		return this.calcularCostoTotal();
+		return this.costoEnvio + super.devolverCostoTotal();
 	}
 
 	@Override
@@ -21,9 +21,9 @@ public class PaqueteOrdinario extends PaqueteAEntregar {
 
 	// ---------------- PRIVATE-----------------------
 
-	private double calcularCostoTotal() {
-		return this.costoEnvio + super.devolverCostoTotal();
-	}
+//	private double calcularCostoTotal() {
+//		return this.costoEnvio + super.devolverCostoTotal();
+//	}
 
 	// Método para validar el costo de envío
 	private int validarCostoEnvio(int costoEnvio) {

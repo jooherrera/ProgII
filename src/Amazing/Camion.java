@@ -12,30 +12,31 @@ public class Camion extends Transporte {
 	@Override
 	public boolean cargarPaquete(PaqueteAEntregar paquete) {
 		boolean ret = false;
-		if (paqueteAceptable(paquete))
+		if (paquete.tamanioMayorQue(VOLUMEN_MIN_POR_PAQUETE))
 			ret |= super.cargarPaquete(paquete);
 		return ret;
 	}
 
 	@Override
 	public double consultarCostoEntrega() {
-		return this.calcularValorAdicional() + super.consultarCostoEntrega();
+		return super.cantPaquetesCargados() * this.adicXPaq + super.consultarCostoEntrega();
 	}
 
 	@Override
 	public String toString() {
-		return "Camion { adicXPaq=" + adicXPaq + ", VOLUMEN_MIN_POR_PAQUETE=" + VOLUMEN_MIN_POR_PAQUETE + ", "
-				+ super.toString();
+		return  "\n" + 
+				"\t tipo: Camionc,\n"
+			  + "\t " + super.toString();
 	}
 
 	// ---------PRIVATE-----------
-	private double calcularValorAdicional() {
-		return super.cantPaquetesCargados() * this.adicXPaq;
-	}
+//	private double calcularValorAdicional() {
+//		return super.cantPaquetesCargados() * this.adicXPaq;
+//	}
 
-	private boolean paqueteAceptable(PaqueteAEntregar paq) {
-		return paq.tamanioMayorQue(VOLUMEN_MIN_POR_PAQUETE);
-	}
+//	private boolean paqueteAceptable(PaqueteAEntregar paq) {
+//		return paq.tamanioMayorQue(VOLUMEN_MIN_POR_PAQUETE);
+//	}
 
 	// Método para validar el valor adicional por paquete
 	private int validarAdicionalPorPaquete(int adicXPaq) {

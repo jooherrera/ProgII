@@ -16,19 +16,22 @@ public class Utilitario extends Transporte {
 
 	@Override
 	public double consultarCostoEntrega() {
-		return calcularValorExtra() + super.consultarCostoEntrega() ;
+		int extra = super.cantPaquetesCargados() > MAX_PAQUETES ? valorExtra : 0;
+		return extra + super.consultarCostoEntrega();
 	}
 
 	@Override
 	public String toString() {
-		return "Utilitario { MAX_PAQUETES=" + MAX_PAQUETES + ", valorExtra=" + valorExtra + ", " + super.toString();
+		return  "\n" + 
+				"\t tipo: Utilitario,\n"
+			  + "\t " + super.toString();
 	}
 
 	// ---------PRIVATE-----------
 
-	private int calcularValorExtra() {
-		return super.cantPaquetesCargados() > MAX_PAQUETES ? valorExtra : 0;
-	}
+//	private int calcularValorExtra() {
+//		return super.cantPaquetesCargados() > MAX_PAQUETES ? valorExtra : 0;
+//	}
 
 	// Método para validar el valor extra
 	private int validarValorExtra(int valorExtra) {

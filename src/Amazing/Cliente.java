@@ -25,7 +25,7 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente { dni=" + dni + ", nombre=" + nombre + ", direccion=" + direccion + " }";
+		return " direccion:" + direccion ;
 	}
 
 	private String devolverNombre() {

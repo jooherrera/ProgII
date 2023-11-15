@@ -12,9 +12,9 @@ public abstract class PaqueteAEntregar {
 		this.precio = validarPrecio(precio);
 		this.direccionEntrega = validarDireccionEntrega(dirEntrega);
 	}
-
+	
 	public double devolverCostoTotal() {
-		return this.costoBase();
+		return this.precio;
 	};
 
 	public boolean cabeEn(int volumen) {
@@ -54,6 +54,11 @@ public abstract class PaqueteAEntregar {
 		return "id=" + id + ", volumen=" + volumen + ", precio=" + precio + ", direccionEntrega=" + direccionEntrega
 				+ ", cargado=" + cargado + " }";
 	}
+	
+	public boolean estaCargado() {
+		return cargado;
+	}
+
 
 	// ------------PRIVATE---------------
 
@@ -85,13 +90,10 @@ public abstract class PaqueteAEntregar {
 		return dirEntrega;
 	}
 
-	private boolean estaCargado() {
-		return cargado;
-	}
 
-	private double costoBase() {
-		return this.precio;
-	}
+//	private double costoBase() {
+//		return this.precio;
+//	}
 
 	// -----------NUEVOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 

@@ -43,7 +43,15 @@ public class EmpresaAmazing implements IEmpresa {
 	@Override
 	public int agregarPaquete(int codPedido, int volumen, int precio, int costoEnvio) {
 		int codigoUnico = sigCodPaquete;
-		this.obtenerPedido(codPedido).agregarPaquete(codigoUnico, volumen, precio, costoEnvio);
+
+		Pedido pedido = this.obtenerPedido(codPedido);
+
+		String dirEntrega = pedido.destino();
+
+		PaqueteOrdinario paquete = new PaqueteOrdinario(codigoUnico, volumen, precio, costoEnvio, dirEntrega);
+
+		pedido.agregarPaquete(paquete);
+
 		this.aumentarCodPaquete();
 		return codigoUnico;
 	}
@@ -51,9 +59,16 @@ public class EmpresaAmazing implements IEmpresa {
 	@Override
 	public int agregarPaquete(int codPedido, int volumen, int precio, int porcentaje, int adicional) {
 		int codigoUnico = sigCodPaquete;
-		this.obtenerPedido(codPedido).agregarPaquete(codigoUnico, volumen, precio, porcentaje, adicional);
-		this.aumentarCodPaquete();
 
+		Pedido pedido = this.obtenerPedido(codPedido);
+
+		String dirEntrega = pedido.destino();
+
+		PaqueteEspecial paquete = new PaqueteEspecial(codigoUnico, volumen, precio, porcentaje, adicional, dirEntrega);
+
+		pedido.agregarPaquete(paquete);
+
+		this.aumentarCodPaquete();
 		return codigoUnico;
 	}
 
@@ -81,21 +96,37 @@ public class EmpresaAmazing implements IEmpresa {
 
 		StringBuilder cargamento = new StringBuilder();
 
+
 		for (Pedido pedido : pedidos.values()) {
-			cargamento.append(pedido.cargarEspecial(transporte));
+			if (!pedido.estaCerrado() || pedido.estaVacio())
+				continue;
+			for (PaqueteAEntregar paq : pedido.obtenerCarrito().values()) {
+				if (paq instanceof PaqueteEspecial && !paq.estaCargado() && transporte.cargarPaquete(paq))
+					cargamento.append(" + [ " + pedido.devolverCodigoUnico() + " - " + paq.devolverCodigoUnico() + " ] "
+							+ paq.devolverDirEntrega() + "\n");
+			}
 		}
 
 		for (Pedido pedido : pedidos.values()) {
-			cargamento.append(pedido.cargarPaquetes(transporte));
+			if (!pedido.estaCerrado() || pedido.estaVacio())
+				continue;
+			for (PaqueteAEntregar paq : pedido.obtenerCarrito().values()) {
+				if (!paq.estaCargado() && transporte.cargarPaquete(paq))
+					cargamento.append(" + [ " + pedido.devolverCodigoUnico() + " - " + paq.devolverCodigoUnico() + " ] "
+							+ paq.devolverDirEntrega() + "\n");
+			}
 		}
+
+//		for (Pedido pedido : pedidos.values()) {
+//			cargamento.append(pedido.cargarPaquetes(transporte));
+//		}
 
 		return cargamento.toString();
 	}
 
 	@Override
 	public double costoEntrega(String patente) {
-		Transporte transporte = this.obtenerTransporte(patente);
-		return transporte.consultarCostoEntrega();
+		return this.obtenerTransporte(patente).consultarCostoEntrega();
 	}
 
 	@Override
@@ -139,8 +170,10 @@ public class EmpresaAmazing implements IEmpresa {
 
 	@Override
 	public String toString() {
-		return "EmpresaAmazing { cuit=" + cuit + ", pedidos=" + pedidos + ", transportes=" + transportes
-				+ ", sigCodPaquete=" + sigCodPaquete + ", totalFacturado=" + totalFacturado + " }";
+		return "EmpresaAmazing { \n " + "cuit:" + cuit + ",\n" +
+				" pedidos registrados:\n\t" + pedidos + ",\n" + 
+				" transportes registrados:\n\t" + transportes + "\n" + 
+			    " }";
 	}
 
 	// --------------- PRIVATE

@@ -41,8 +41,8 @@ public abstract class Transporte {
 
 	@Override
 	public String toString() {
-		return "patente=" + patente + ", volMax=" + volMax + ", volActual=" + volActual + ", valorViaje=" + valorViaje
-				+ ", cargamento=" + cargamento + " }";
+		return "capacidad: " + volMax + ",\n" + "\t capacidad disponible=" + volActual + ",\n\t"
+				+ "cantidad de paquetes: " + cargamento.size() + "\n\t";
 	}
 
 	// ---------------PRIVATE----------------

@@ -14,7 +14,12 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 
 	@Override
 	public double devolverCostoTotal() {
-		return calcularCostoTotal();
+		if (super.tamanioMenorIgualQue(VOL_ADICIONAL))
+			return costoBase();
+		if (super.tamanioMayorQue(VOL_ADICIONAL_DUPLICADO))
+			return adicionalDuplicado();
+		return adicionalSumado();
+
 	}
 
 	@Override
@@ -25,13 +30,13 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 
 	// ---------------- PRIVATE-----------------------
 
-	private double calcularCostoTotal() {
-		if (super.tamanioMenorIgualQue(VOL_ADICIONAL))
-			return costoBase();
-		if (super.tamanioMayorQue(VOL_ADICIONAL_DUPLICADO))
-			return adicionalDuplicado();
-		return adicionalSumado();
-	}
+//	private double calcularCostoTotal() {
+//		if (super.tamanioMenorIgualQue(VOL_ADICIONAL))
+//			return costoBase();
+//		if (super.tamanioMayorQue(VOL_ADICIONAL_DUPLICADO))
+//			return adicionalDuplicado();
+//		return adicionalSumado();
+//	}
 
 	private double adicionalSumado() {
 		return this.costoBase() + this.adicional();

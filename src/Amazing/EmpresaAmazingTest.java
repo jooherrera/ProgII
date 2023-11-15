@@ -44,7 +44,7 @@ public class EmpresaAmazingTest {
 		pedidoAbierto=emp.registrarPedido("Irwin", "Calle falsa 123", 11111111);
 		pedidoCerrado = emp.registrarPedido("Billy", "Avenida siempre viva 47", 22222222);
 		pedidoCerradoAux = emp.registrarPedido("Mandy", "Casa sin numero", 33333333);
-		pedidoAbiertoAux = emp.registrarPedido("Godofredo", "Inframundo 72", 33333333);
+		pedidoAbiertoAux = emp.registrarPedido("Godofredo", "Inframundo 72", 44444444);
 		// cargar paquetes a los pedidos
 		precioPedidoAbierto = cargarPedido(emp, pedidoAbierto);
 		facturacionTotal += cargarPedido(emp, pedidoCerrado);

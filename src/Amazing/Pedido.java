@@ -1,7 +1,6 @@
 package Amazing;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class Pedido {
@@ -19,90 +18,104 @@ public class Pedido {
 		this.cerrado = false;
 	}
 
-	public void agregarPaquete(int codigoPaquete, int volumen, int precio, int costoEnvio) {
+	public void agregarPaquete(PaqueteAEntregar paquete) {
 		if (estaCerrado())
 			throw new RuntimeException("El pedido está finalizado.");
 
-		String dirEntrega = obtenerDirCliente();
-		PaqueteOrdinario paquete = new PaqueteOrdinario(codigoPaquete, volumen, precio, costoEnvio, dirEntrega);
-
-		carrito.put(codigoPaquete, paquete);
+		carrito.put(paquete.codigoUnicoNum(), paquete);
 
 		facturacion += paquete.devolverCostoTotal();
 	}
 
-	public void agregarPaquete(int codigoPaquete, int volumen, int precio, int porcentaje, int adicional) {
-		if (estaCerrado())
-			throw new RuntimeException("El pedido está finalizado.");
-
-		String dirEntrega = obtenerDirCliente();
-		PaqueteEspecial paquete = new PaqueteEspecial(codigoPaquete, volumen, precio, porcentaje, adicional,
-				dirEntrega);
-
-		carrito.put(codigoPaquete, paquete);
-
-		facturacion += paquete.devolverCostoTotal();
-	}
+//	public void agregarPaquete(int codigoPaquete, int volumen, int precio, int costoEnvio) {
+//		if (estaCerrado())
+//			throw new RuntimeException("El pedido está finalizado.");
+//
+//		String dirEntrega = obtenerDirCliente();
+//		PaqueteOrdinario paquete = new PaqueteOrdinario(codigoPaquete, volumen, precio, costoEnvio, dirEntrega);
+//
+//		carrito.put(codigoPaquete, paquete);
+//
+//		facturacion += paquete.devolverCostoTotal();
+//	}
+//
+//	public void agregarPaquete(int codigoPaquete, int volumen, int precio, int porcentaje, int adicional) {
+//		if (estaCerrado())
+//			throw new RuntimeException("El pedido está finalizado.");
+//
+//		String dirEntrega = obtenerDirCliente();
+//		PaqueteEspecial paquete = new PaqueteEspecial(codigoPaquete, volumen, precio, porcentaje, adicional,
+//				dirEntrega);
+//
+//		carrito.put(codigoPaquete, paquete);
+//
+//		facturacion += paquete.devolverCostoTotal();
+//	}
 
 	public boolean eliminarPaquete(int id) {
-		if (estaCerrado() || !existePaquete(id))
+		if (estaCerrado() || !carrito.containsKey(id))
 			return false;
 
-		PaqueteAEntregar paquete = carrito.get(id);
+//		PaqueteAEntregar paquete = carrito.get(id).devolverCostoTotal();
 
-		facturacion -= paquete.devolverCostoTotal();
+		facturacion -= carrito.get(id).devolverCostoTotal();
 		carrito.remove(id);
 		return true;
 
 	}
 
-	public String cargarPaquetes(Transporte t) {
-		if (!estaCerrado())
-			return "";
-		StringBuilder cargados = new StringBuilder();
-
-		Iterator<Map.Entry<Integer, PaqueteAEntregar>> iterator = carrito.entrySet().iterator();
-
-		while (iterator.hasNext()) {
-			Map.Entry<Integer, PaqueteAEntregar> entry = iterator.next();
-			PaqueteAEntregar paq = entry.getValue();
-
-			if (paqueteCargado(t.cargarPaquete(paq))) {
-				cargados.append(obtenerDatos(paq));
-				iterator.remove();
-			}
-
-		}
-
-		return cargados.toString();
+	public Map<Integer, PaqueteAEntregar> obtenerCarrito() {
+		return this.carrito;
 	}
+
+//	public String cargarPaquetes(Transporte t) {
+//		if (!estaCerrado())
+//			return "";
+//		StringBuilder cargados = new StringBuilder();
+//
+//		Iterator<Map.Entry<Integer, PaqueteAEntregar>> iterator = carrito.entrySet().iterator();
+//
+//		while (iterator.hasNext()) {
+//			Map.Entry<Integer, PaqueteAEntregar> entry = iterator.next();
+//			PaqueteAEntregar paq = entry.getValue();
+//
+//			if (paqueteCargado(t.cargarPaquete(paq))) {
+//				cargados.append(obtenerDatos(paq));
+//				iterator.remove();
+//			}
+//
+//		}
+//
+//		return cargados.toString();
+//	}
+//	
 
 	///////
-	public String cargarEspecial(Transporte t) {
-		if (!estaCerrado())
-			return "";
-
-		StringBuilder cargados = new StringBuilder();
-
-		Iterator<Map.Entry<Integer, PaqueteAEntregar>> iterator = carrito.entrySet().iterator();
-
-		while (iterator.hasNext()) {
-			Map.Entry<Integer, PaqueteAEntregar> entry = iterator.next();
-			PaqueteAEntregar paq = entry.getValue();
-
-			if (paq instanceof PaqueteEspecial && paqueteCargado(t.cargarPaquete(paq))) {
-				cargados.append(obtenerDatos(paq));
-				iterator.remove();
-			}
-
-		}
-
-		return cargados.toString();
-
-	}
+//	public String cargarEspecial(Transporte t) {
+//		if (!estaCerrado())
+//			return "";
+//
+//		StringBuilder cargados = new StringBuilder();
+//
+//		Iterator<Map.Entry<Integer, PaqueteAEntregar>> iterator = carrito.entrySet().iterator();
+//
+//		while (iterator.hasNext()) {
+//			Map.Entry<Integer, PaqueteAEntregar> entry = iterator.next();
+//			PaqueteAEntregar paq = entry.getValue();
+//
+//			if (paq instanceof PaqueteEspecial && paqueteCargado(t.cargarPaquete(paq))) {
+//				cargados.append(obtenerDatos(paq));
+//				iterator.remove();
+//			}
+//
+//		}
+//
+//		return cargados.toString();
+//
+//	}
 
 	public String duenio() {
-		return obtenerNombreDelCliente();
+		return this.datosCliente.identificacion();
 	}
 
 //	public PaqueteAEntregar entregarPaquete(int id) {
@@ -122,14 +135,15 @@ public class Pedido {
 
 	@Override
 	public String toString() {
-		return "Pedido { numPedido=" + numPedido + ", datosCliente=" + datosCliente + ", carrito=" + carrito
-				+ ", facturacion=" + facturacion + ", cerrado=" + cerrado + "}";
+		return "\n" + "\t" + datosCliente + ",\n" + "\t cantidad de paquetes:" + carrito.size() + ",\n"
+				+ "\t facturacion total: $" + facturacion + ",\n" + "\t cerrado:" + cerrado + "\n\t";
 	}
 
 	public double cerrarPedido() {
 		if (estaCerrado())
 			throw new RuntimeException("Pedido con código: " + this.numPedido + " no está disponible.");
-		return finalizarPedido();
+		cerrado = true;
+		return (double) this.facturacion;
 	}
 
 	public String devolverCodigoUnico() {
@@ -138,42 +152,34 @@ public class Pedido {
 
 	// --------------PRIVATE---------------
 
-	private String codUnico() {
-		return "" + this.numPedido;
-	}
+//	private String obtenerNombreDelCliente() {
+//		return this.datosCliente.identificacion();
+//	}
 
-	private boolean paqueteCargado(boolean resp) {
-		return resp;
-	}
+//	private double finalizarPedido() {
+//		cerrado = true;
+//		return (double) this.facturacion;
+//	}
 
-	private String obtenerNombreDelCliente() {
-		return this.datosCliente.identificacion();
-	}
-
-	private double finalizarPedido() {
-		cerrado = true;
-		return (double) this.facturacion;
-	}
-
-	private boolean estaCerrado() {
+	public boolean estaCerrado() {
 		return cerrado;
 	}
 
-	private boolean estaVacio() {
+	public boolean estaVacio() {
 		return this.carrito.size() < 1;
 	}
 
-	private String obtenerDirCliente() {
+	public String destino() {
 		return datosCliente.domicilio();
 	}
 
-	private boolean existePaquete(int id) {
-		return carrito.containsKey(id);
-	}
+//	private boolean existePaquete(int id) {
+//		return carrito.containsKey(id);
+//	}
 
-	private String obtenerDatos(PaqueteAEntregar paq) {
-		return " + [ " + codUnico() + " - " + paq.devolverCodigoUnico() + " ] " + paq.devolverDirEntrega() + "\n";
-	}
+//	private String obtenerDatos(PaqueteAEntregar paq) {
+//		return " + [ " + codUnico() + " - " + paq.devolverCodigoUnico() + " ] " + paq.devolverDirEntrega() + "\n";
+//	}
 
 	// Método para validar el número de pedido
 	private int validarNumPedido(int numPedido) {
