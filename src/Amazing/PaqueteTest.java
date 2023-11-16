@@ -87,13 +87,6 @@ public class PaqueteTest {
 		assertEquals(volumen, paqOrdinario.cargarATransporte());
 	}
 
-	@Test(expected = RuntimeException.class)
-	public void paqueteCargarATransporte_nok() {
-		// Primera vez carga
-		paqOrdinario.cargarATransporte();
-		// Segunda vez lanza error
-		paqOrdinario.cargarATransporte();
-	}
 
 
 }

@@ -21,7 +21,8 @@ public abstract class Transporte {
 	public double consultarCostoEntrega() {
 		if (this.estaVacio())
 			throw new RuntimeException("Transporte vacío.");
-		this.repartir();
+		this.volActual = this.volMax;
+		this.cargamento.clear();
 		return (double) this.valorViaje;
 	}
 
@@ -30,7 +31,7 @@ public abstract class Transporte {
 	}
 
 	public boolean cargarPaquete(PaqueteAEntregar paquete, int limite) {
-		if (this.hayCapacidad(limite))
+		if (cantPaquetes() < limite)
 			return this.cargar(paquete);
 		return false;
 	}
@@ -39,15 +40,23 @@ public abstract class Transporte {
 		return this.cantPaquetes();
 	}
 
-	@Override
-	public String toString() {
-		return "capacidad: " + volMax + ",\n" + "\t capacidad disponible=" + volActual + ",\n\t"
-				+ "cantidad de paquetes: " + cargamento.size() + "\n\t";
+	public String obtenerPatente() {
+		return this.patente;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sBuilder = new StringBuilder();
+		sBuilder.append("capacidad: ").append(volMax).append(",\n").append("\t capacidad disponible: ")
+				.append(volActual).append(",\n\t").append(" cantidad de paquetes cargados: ").append(cargamento.size())
+				.append("\n\t");
+		return sBuilder.toString();
+	}
 	// ---------------PRIVATE----------------
 
 	private boolean cargar(PaqueteAEntregar paquete) {
+		if (paquete.estaCargado())
+			return false;
 		if (paquete.cabeEn(volActual)) {
 			this.volActual -= paquete.cargarATransporte();
 			this.cargamento.put(Integer.parseInt(paquete.devolverCodigoUnico()), paquete);
@@ -60,17 +69,8 @@ public abstract class Transporte {
 		return this.cantPaquetes() < 1;
 	}
 
-	private void repartir() {
-		this.volActual = this.volMax;
-		this.cargamento.clear();
-	}
-
 	private int cantPaquetes() {
 		return this.cargamento.size();
-	}
-
-	private boolean hayCapacidad(int limite) {
-		return this.cantPaquetes() < limite;
 	}
 
 	// Validación de la patente
@@ -97,36 +97,30 @@ public abstract class Transporte {
 	// NUEVOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 	@Override
 	public boolean equals(Object obj) {
-		return esMismoTipo(obj) && this.esIgual((Transporte) obj);
-	}
+		if (obj == null || getClass() != obj.getClass())
+			return false;
 
-	private boolean esIgual(Transporte transporte) {
-		return !transporte.esMismaPatente(this.patente) && transporte.esMismoCargamento(this.cargamento);
-	}
+		Transporte transporte = (Transporte) obj;
 
-	private boolean esMismoTipo(Object obj) {
-		return obj != null && getClass() == obj.getClass();
-	}
-
-	private boolean esMismaPatente(String pat) {
-		return this.patente.equals(pat);
+		return transporte.esMismoCargamento(this.cargamento);
 	}
 
 	private boolean esMismoCargamento(Map<Integer, PaqueteAEntregar> carga) {
-		boolean ret = false;
-		if (esMismaCantidadCargamento(carga))
-			for (PaqueteAEntregar paq : carga.values()) {
-				ret |= algunParecidoA(paq);
-			}
-		return ret;
+
+		if(!esMismaCantidadCargamento(carga) || carga.size() == 0 || this.cargamento.size() == 0)
+			return false;
+		Map<String, Integer> frecuenciaConjunto1 = contarFrecuencia(this.cargamento);
+		Map<String, Integer> frecuenciaConjunto2 = contarFrecuencia(carga);
+
+		return frecuenciaConjunto1.equals(frecuenciaConjunto2);
+
 	}
 
-	private boolean algunParecidoA(PaqueteAEntregar paq) {
-		boolean ret = false;
-		for (PaqueteAEntregar elem : this.cargamento.values()) {
-			ret |= elem.equals(paq);
-		}
-		return ret;
+	private static Map<String, Integer> contarFrecuencia(Map<Integer, PaqueteAEntregar> cargamento) {
+		Map<String, Integer> frecuencia = new HashMap<>();
+		for (PaqueteAEntregar paquete : cargamento.values()) 
+			frecuencia.put(paquete.toString(), frecuencia.getOrDefault(paquete, 0) + 1);
+		return frecuencia;
 	}
 
 	private boolean esMismaCantidadCargamento(Map<Integer, PaqueteAEntregar> carga) {

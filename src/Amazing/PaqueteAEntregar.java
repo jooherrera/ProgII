@@ -5,14 +5,13 @@ public abstract class PaqueteAEntregar {
 	private String direccionEntrega;
 	private boolean cargado;
 
-
 	public PaqueteAEntregar(int id, int volumen, int precio, String dirEntrega) {
 		this.id = validarId(id);
 		this.volumen = validarVolumen(volumen);
 		this.precio = validarPrecio(precio);
 		this.direccionEntrega = validarDireccionEntrega(dirEntrega);
 	}
-	
+
 	public double devolverCostoTotal() {
 		return this.precio;
 	};
@@ -43,22 +42,22 @@ public abstract class PaqueteAEntregar {
 
 	public int cargarATransporte() {
 		if (estaCargado())
-			throw new RuntimeException("El paquete ya está cargado.");
+			return 0;
 
 		this.cargado = true;
 		return this.volumen;
 	}
 
-	@Override
-	public String toString() {
-		return "id=" + id + ", volumen=" + volumen + ", precio=" + precio + ", direccionEntrega=" + direccionEntrega
-				+ ", cargado=" + cargado + " }";
-	}
-	
 	public boolean estaCargado() {
 		return cargado;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sBuilder = new StringBuilder();
+		sBuilder.append(", volumen:").append(volumen).append(", precio:").append(precio);
+		return sBuilder.toString();
+	}
 
 	// ------------PRIVATE---------------
 
@@ -90,23 +89,15 @@ public abstract class PaqueteAEntregar {
 		return dirEntrega;
 	}
 
-
-//	private double costoBase() {
-//		return this.precio;
-//	}
-
 	// -----------NUEVOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 
 	@Override
 	public boolean equals(Object obj) {
-		return this.esMismoTipo(obj) && this.esIgual((PaqueteAEntregar) obj);
-	}
+		if (obj == null || getClass() != obj.getClass())
+			return false;
 
-	private boolean esMismoTipo(Object obj) {
-		return obj != null && getClass() == obj.getClass();
-	}
+		PaqueteAEntregar paq = (PaqueteAEntregar) obj;
 
-	private boolean esIgual(PaqueteAEntregar paq) {
 		return paq.esMismoVolumen(this.volumen) && paq.esMismoPrecio(this.precio);
 	}
 

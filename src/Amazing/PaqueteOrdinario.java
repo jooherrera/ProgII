@@ -1,6 +1,5 @@
 package Amazing;
 
-
 public class PaqueteOrdinario extends PaqueteAEntregar {
 	private int costoEnvio;
 
@@ -16,7 +15,9 @@ public class PaqueteOrdinario extends PaqueteAEntregar {
 
 	@Override
 	public String toString() {
-		return "PaqueteOrdinario { costoEnvio=" + costoEnvio + " , " + super.toString();
+		StringBuilder sBuilder = new StringBuilder();
+		sBuilder.append("costoEnvio:").append(costoEnvio).append(", ").append(super.toString()).append("}");
+		return sBuilder.toString();
 	}
 
 	// ---------------- PRIVATE-----------------------
@@ -36,14 +37,11 @@ public class PaqueteOrdinario extends PaqueteAEntregar {
 
 	@Override
 	public boolean equals(Object obj) {
-		return this.esMismoTipo(obj) && this.esIgual((PaqueteOrdinario) obj);
-	}
+		if (obj == null || getClass() != obj.getClass())
+			return false;
 
-	private boolean esMismoTipo(Object obj) {
-		return obj != null && getClass() == obj.getClass();
-	}
+		PaqueteOrdinario paq = (PaqueteOrdinario) obj;
 
-	private boolean esIgual(PaqueteOrdinario paq) {
 		return paq.esMismoCostoEnvio(this.costoEnvio) && super.equals(paq);
 	}
 

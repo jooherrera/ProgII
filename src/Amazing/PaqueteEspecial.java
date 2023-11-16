@@ -24,19 +24,13 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 
 	@Override
 	public String toString() {
-		return "PaqueteEspecial { adicional=" + adicional + ", porcentaje=" + porcentaje + ", VOL_ADICIONAL_DUPLICADO="
-				+ VOL_ADICIONAL_DUPLICADO + ", VOL_ADICIONAL=" + VOL_ADICIONAL + ", " + super.toString();
+		StringBuilder sBuilder = new StringBuilder();
+		sBuilder.append("{ adicional:").append(adicional).append(", porcentaje:").append(porcentaje).append(", ")
+				.append(super.toString()).append("}");
+		return sBuilder.toString();
 	}
 
 	// ---------------- PRIVATE-----------------------
-
-//	private double calcularCostoTotal() {
-//		if (super.tamanioMenorIgualQue(VOL_ADICIONAL))
-//			return costoBase();
-//		if (super.tamanioMayorQue(VOL_ADICIONAL_DUPLICADO))
-//			return adicionalDuplicado();
-//		return adicionalSumado();
-//	}
 
 	private double adicionalSumado() {
 		return this.costoBase() + this.adicional();
@@ -78,14 +72,11 @@ public class PaqueteEspecial extends PaqueteAEntregar {
 
 	@Override
 	public boolean equals(Object obj) {
-		return this.esMismoTipo(obj) && this.esIgual((PaqueteEspecial) obj);
-	}
+		if (obj == null || getClass() != obj.getClass())
+			return false;
 
-	private boolean esMismoTipo(Object obj) {
-		return obj != null && getClass() == obj.getClass();
-	}
+		PaqueteEspecial paq = (PaqueteEspecial) obj;
 
-	private boolean esIgual(PaqueteEspecial paq) {
 		return paq.esMismoAdicional(this.adicional) && paq.esMismoPorcentaje(this.porcentaje) && super.equals(paq);
 	}
 

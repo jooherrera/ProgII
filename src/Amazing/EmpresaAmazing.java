@@ -94,34 +94,14 @@ public class EmpresaAmazing implements IEmpresa {
 
 		Transporte transporte = this.obtenerTransporte(patente);
 
-		StringBuilder cargamento = new StringBuilder();
-
-
-		for (Pedido pedido : pedidos.values()) {
-			if (!pedido.estaCerrado() || pedido.estaVacio())
-				continue;
-			for (PaqueteAEntregar paq : pedido.obtenerCarrito().values()) {
-				if (paq instanceof PaqueteEspecial && !paq.estaCargado() && transporte.cargarPaquete(paq))
-					cargamento.append(" + [ " + pedido.devolverCodigoUnico() + " - " + paq.devolverCodigoUnico() + " ] "
-							+ paq.devolverDirEntrega() + "\n");
-			}
-		}
+		StringBuilder sBuilder = new StringBuilder();
 
 		for (Pedido pedido : pedidos.values()) {
-			if (!pedido.estaCerrado() || pedido.estaVacio())
-				continue;
-			for (PaqueteAEntregar paq : pedido.obtenerCarrito().values()) {
-				if (!paq.estaCargado() && transporte.cargarPaquete(paq))
-					cargamento.append(" + [ " + pedido.devolverCodigoUnico() + " - " + paq.devolverCodigoUnico() + " ] "
-							+ paq.devolverDirEntrega() + "\n");
-			}
+			pedido.cargarPaquete(transporte, sBuilder, paquete -> paquete instanceof PaqueteEspecial);
+			pedido.cargarPaquete(transporte, sBuilder, paquete -> true);
 		}
 
-//		for (Pedido pedido : pedidos.values()) {
-//			cargamento.append(pedido.cargarPaquetes(transporte));
-//		}
-
-		return cargamento.toString();
+		return sBuilder.toString();
 	}
 
 	@Override
@@ -153,8 +133,12 @@ public class EmpresaAmazing implements IEmpresa {
 	public boolean hayTransportesIdenticos() {
 		boolean ret = false;
 
-		for (Transporte t1 : transportes.values())
+		for (Transporte t1 : transportes.values()) {
+//			if(t1.cantPaquetesCargados() == 0)
+//				continue;
 			ret |= algunParecidoA(t1);
+		}
+
 
 		return ret;
 
@@ -162,18 +146,22 @@ public class EmpresaAmazing implements IEmpresa {
 
 	private boolean algunParecidoA(Transporte t) {
 		boolean ret = false;
-		for (Transporte elem : this.transportes.values())
+		for (Transporte elem : this.transportes.values()) {
+			if(t.obtenerPatente() == elem.obtenerPatente())
+				continue;
 			ret |= elem.equals(t);
+		}
 
 		return ret;
 	}
 
 	@Override
 	public String toString() {
-		return "EmpresaAmazing { \n " + "cuit:" + cuit + ",\n" +
-				" pedidos registrados:\n\t" + pedidos + ",\n" + 
-				" transportes registrados:\n\t" + transportes + "\n" + 
-			    " }";
+		StringBuilder sBuilder = new StringBuilder();
+		 sBuilder.append("EmpresaAmazing { \n ").append("cuit: ").append(cuit).append(",\n")
+				.append(" pedidos registrados:\n\t").append(pedidos).append(",\n")
+				.append(" transportes registrados:\n\t").append(transportes).append(",\n").append(" }");
+		 return sBuilder.toString();
 	}
 
 	// --------------- PRIVATE

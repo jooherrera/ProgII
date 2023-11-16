@@ -1,7 +1,9 @@
 package Amazing;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class Pedido {
 	private int numPedido;
@@ -56,17 +58,15 @@ public class Pedido {
 		if (estaCerrado() || !carrito.containsKey(id))
 			return false;
 
-//		PaqueteAEntregar paquete = carrito.get(id).devolverCostoTotal();
-
 		facturacion -= carrito.get(id).devolverCostoTotal();
 		carrito.remove(id);
 		return true;
 
 	}
 
-	public Map<Integer, PaqueteAEntregar> obtenerCarrito() {
-		return this.carrito;
-	}
+//	public Map<Integer, PaqueteAEntregar> obtenerCarrito() {
+//		return this.carrito;
+//	}
 
 //	public String cargarPaquetes(Transporte t) {
 //		if (!estaCerrado())
@@ -90,27 +90,29 @@ public class Pedido {
 //	}
 //	
 
-	///////
-//	public String cargarEspecial(Transporte t) {
+	public void cargarPaquete(Transporte t, StringBuilder sBuilder, Predicate<PaqueteAEntregar> filtro) {
+		if (!estaCerrado())
+			return;
+		for (PaqueteAEntregar paquete : carrito.values())
+			if (filtro.test(paquete) && t.cargarPaquete(paquete) )
+				obtenerDatos(paquete, sBuilder);
+	}
+
+//	public void cargarComunes(Transporte t, StringBuilder sBuilder) {
 //		if (!estaCerrado())
-//			return "";
+//			return;
+//		for (PaqueteAEntregar paquete : carrito.values())
+//			t.cargarPaquete(devolverCodigoUnico(), paquete, sBuilder);
 //
-//		StringBuilder cargados = new StringBuilder();
+//	}
 //
-//		Iterator<Map.Entry<Integer, PaqueteAEntregar>> iterator = carrito.entrySet().iterator();
-//
-//		while (iterator.hasNext()) {
-//			Map.Entry<Integer, PaqueteAEntregar> entry = iterator.next();
-//			PaqueteAEntregar paq = entry.getValue();
-//
-//			if (paq instanceof PaqueteEspecial && paqueteCargado(t.cargarPaquete(paq))) {
-//				cargados.append(obtenerDatos(paq));
-//				iterator.remove();
-//			}
-//
-//		}
-//
-//		return cargados.toString();
+//	///////
+//	public void cargarPrioritario(Transporte t, StringBuilder sBuilder) {
+//		if (!estaCerrado())
+//			return;
+//		for (PaqueteAEntregar paquete : carrito.values())
+//			if (paquete instanceof PaqueteEspecial)
+//				t.cargarPaquete(devolverCodigoUnico(), paquete, sBuilder);
 //
 //	}
 
@@ -118,27 +120,12 @@ public class Pedido {
 		return this.datosCliente.identificacion();
 	}
 
-//	public PaqueteAEntregar entregarPaquete(int id) {
-//		if (cerrado && carrito.containsKey(id)) {
-//			PaqueteAEntregar paquete = carrito.get(id);
-//			carrito.remove(id);
-//			return paquete;
-//		}
-//		return null;
-//	}
-
 	public boolean faltanEntregar() {
 		if (estaCerrado() && !estaVacio())
 			return true;
 		return false;
 	}
-
-	@Override
-	public String toString() {
-		return "\n" + "\t" + datosCliente + ",\n" + "\t cantidad de paquetes:" + carrito.size() + ",\n"
-				+ "\t facturacion total: $" + facturacion + ",\n" + "\t cerrado:" + cerrado + "\n\t";
-	}
-
+	
 	public double cerrarPedido() {
 		if (estaCerrado())
 			throw new RuntimeException("Pedido con código: " + this.numPedido + " no está disponible.");
@@ -150,16 +137,19 @@ public class Pedido {
 		return "" + this.numPedido;
 	}
 
+
+	@Override
+	public String toString() {
+	    StringBuilder sBuilder = new StringBuilder();
+	    sBuilder.append(datosCliente).append(",\n")
+	            .append("\t cantidad de paquetes:").append(carrito.size()).append(",\n")
+	            .append("\t facturacion total: $").append(facturacion).append(",\n")
+	            .append("\t cerrado:").append(cerrado).append("\n\t");
+	    return sBuilder.toString();
+	}
+
+
 	// --------------PRIVATE---------------
-
-//	private String obtenerNombreDelCliente() {
-//		return this.datosCliente.identificacion();
-//	}
-
-//	private double finalizarPedido() {
-//		cerrado = true;
-//		return (double) this.facturacion;
-//	}
 
 	public boolean estaCerrado() {
 		return cerrado;
@@ -173,13 +163,12 @@ public class Pedido {
 		return datosCliente.domicilio();
 	}
 
-//	private boolean existePaquete(int id) {
-//		return carrito.containsKey(id);
-//	}
-
-//	private String obtenerDatos(PaqueteAEntregar paq) {
-//		return " + [ " + codUnico() + " - " + paq.devolverCodigoUnico() + " ] " + paq.devolverDirEntrega() + "\n";
-//	}
+	private void obtenerDatos(PaqueteAEntregar paq, StringBuilder sBuilder) {
+		sBuilder.append(" + [ ").append(this.numPedido)
+        .append(" - ").append(paq.devolverCodigoUnico())
+        .append(" ] ").append(paq.devolverDirEntrega())
+        .append("\n");
+	}
 
 	// Método para validar el número de pedido
 	private int validarNumPedido(int numPedido) {

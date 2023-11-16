@@ -24,33 +24,23 @@ public class Camion extends Transporte {
 
 	@Override
 	public String toString() {
-		return  "\n" + 
-				"\t tipo: Camionc,\n"
-			  + "\t " + super.toString();
+		StringBuilder sBuilder = new StringBuilder();
+		sBuilder.append("\n").append("\t tipo: Camion,\n").append("\t ").append(super.toString());
+		return sBuilder.toString();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		return super.equals(obj);
+	}
 	// ---------PRIVATE-----------
-//	private double calcularValorAdicional() {
-//		return super.cantPaquetesCargados() * this.adicXPaq;
-//	}
 
-//	private boolean paqueteAceptable(PaqueteAEntregar paq) {
-//		return paq.tamanioMayorQue(VOLUMEN_MIN_POR_PAQUETE);
-//	}
-
-	// Método para validar el valor adicional por paquete
 	private int validarAdicionalPorPaquete(int adicXPaq) {
 		if (adicXPaq < 0)
 			throw new RuntimeException("El valor adicional por paquete no puede ser negativo.");
 		return adicXPaq;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		return esMismoTipo(obj) && super.equals(obj);
-	}
-
-	private boolean esMismoTipo(Object obj) {
-		return obj != null && getClass() == obj.getClass();
-	}
 }

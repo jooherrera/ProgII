@@ -16,38 +16,26 @@ public class Automovil extends Transporte {
 			ret |= super.cargarPaquete(paquete, maxPaq);
 		return ret;
 	}
-	
-//	@Override
-//	public double consultarCostoEntrega() {
-//		return super.consultarCostoEntrega();
-//	}
 
 	@Override
 	public String toString() {
-		return "\n"
-				+ "\t tipo: Automovil,\n"
-				+ "\t " + super.toString();
+		StringBuilder sBuilder = new StringBuilder();
+		sBuilder.append("\n").append("\t tipo: Automovil,\n").append("\t ").append(super.toString());
+		return sBuilder.toString();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		return super.equals(obj);
+	}
 	// --------PRIVATE-----
 
 	private int validarCantidadMaxima(int cantMax) {
 		if (cantMax < 1)
 			throw new RuntimeException("Paramtro invalido.");
 		return cantMax;
-	}
-
-//	private boolean paqueteAceptable(PaqueteAEntregar paq) {
-//		return (paq instanceof PaqueteOrdinario) && paq.cabeEn(VOLUMEN_MAX_POR_PAQUETE);
-//	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return esMismoTipo(obj) && super.equals(obj);
-	}
-
-	private boolean esMismoTipo(Object obj) {
-		return obj != null && getClass() == obj.getClass();
 	}
 
 }

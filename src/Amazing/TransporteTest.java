@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashSet;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -180,10 +182,18 @@ public class TransporteTest {
 	@Test
 	public void autoMismaCarga() {
 		PaqueteOrdinario paqOrdinario1 = new PaqueteOrdinario(1, 500, 100, 100, "Av Siempreviva 742");
-		PaqueteOrdinario paqOrdinario2 = new PaqueteOrdinario(2, 500, 100, 100, "Otra calle");
-
+		PaqueteOrdinario paqOrdinario3 = new PaqueteOrdinario(3, 500, 150, 567, "Otra calle");
+		PaqueteOrdinario paqOrdinario6 = new PaqueteOrdinario(6, 500, 150, 567, "Otra calle");
+		PaqueteOrdinario paqOrdinario2 = new PaqueteOrdinario(2, 500, 150, 567, "Otra calle");
+		PaqueteOrdinario paqOrdinario4 = new PaqueteOrdinario(4, 500, 150, 567, "Otra calle");
+		PaqueteOrdinario paqOrdinario5 = new PaqueteOrdinario(5, 500, 100, 100, "Otra calle");
+		
 		auto.cargarPaquete(paqOrdinario1);		
+		auto.cargarPaquete(paqOrdinario3);
+		auto.cargarPaquete(paqOrdinario6);		
 		auto2.cargarPaquete(paqOrdinario2);
+		auto2.cargarPaquete(paqOrdinario4);
+		auto2.cargarPaquete(paqOrdinario5);
 
 		assertTrue(auto.equals(auto2)); //
 	}

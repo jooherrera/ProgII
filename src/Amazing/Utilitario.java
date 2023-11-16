@@ -22,31 +22,23 @@ public class Utilitario extends Transporte {
 
 	@Override
 	public String toString() {
-		return  "\n" + 
-				"\t tipo: Utilitario,\n"
-			  + "\t " + super.toString();
-	}
-
-	// ---------PRIVATE-----------
-
-//	private int calcularValorExtra() {
-//		return super.cantPaquetesCargados() > MAX_PAQUETES ? valorExtra : 0;
-//	}
-
-	// Método para validar el valor extra
-	private int validarValorExtra(int valorExtra) {
-		if (valorExtra < 0)
-			throw new RuntimeException("El valor extra no puede ser negativo.");
-		return valorExtra;
+		StringBuilder sBuilder = new StringBuilder();
+		sBuilder.append("\n").append("\t tipo: Utilitario,\n").append("\t ").append(super.toString());
+		return sBuilder.toString();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return esMismoTipo(obj) && super.equals(obj);
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		return super.equals(obj);
 	}
+	// ---------PRIVATE-----------
 
-	private boolean esMismoTipo(Object obj) {
-		return obj != null && getClass() == obj.getClass();
+	private int validarValorExtra(int valorExtra) {
+		if (valorExtra < 0)
+			throw new RuntimeException("El valor extra no puede ser negativo.");
+		return valorExtra;
 	}
 
 }
